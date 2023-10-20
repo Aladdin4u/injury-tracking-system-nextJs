@@ -4,7 +4,9 @@ import gql from "graphql-tag"
 import { useMutation } from "@apollo/client"
 import client from "../../lib/apollo-client"
 import { ReportProps } from "../../components/Report"
-import { GetServerSideProps } from "next"
+import { GetServerSideProps } from "next";
+import { authOptions } from '../api/auth/[...nextauth]';
+import { getServerSession } from "next-auth/next";
 
 const DeleteMutation = gql`
   mutation DeleteMutation($id: ID!) {
@@ -20,9 +22,14 @@ const DeleteMutation = gql`
   }
 `
 
+interface BodyMap {
+  id: number;
+  label: string;
+  details: string;
+}
+
 const Report: React.FC<{ data: { report: ReportProps } }> = (props) => {
   const id = useRouter().query.id
-
   const [deleteReport] = useMutation(DeleteMutation)
 
   let name = props.data.report.name
@@ -34,6 +41,14 @@ const Report: React.FC<{ data: { report: ReportProps } }> = (props) => {
         <h2>{name}</h2>
         <p>By {authorName}</p>
         <p>{props.data.report.date}</p>
+        {props.data.report.bodymaps.map<BodyMap[]>((b) => 
+          (<div key={b.id}>
+            <h3>{b.label}</h3>
+            <p>{b.details}</p>
+          </div>)
+          )}
+        
+        <button onClick={() => Router.push("/edit/[id]", `/edit/${id}`)}>update</button>
         <button
           onClick={async e => {
             await deleteReport({
@@ -73,6 +88,15 @@ const Report: React.FC<{ data: { report: ReportProps } }> = (props) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getServerSession(context.req, context.res, authOptions)
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
   const id = Number(Array.isArray(context.params?.id) ? context.params?.id[0] : context.params?.id)
   const { data } = await client.query({
     query: gql`
@@ -81,6 +105,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           id
           name
           date
+          bodymaps {
+            id
+            label
+            details
+          }
           user {
             id
             name
@@ -93,7 +122,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
-      data
+      data,
+      session
     },
   };
 }

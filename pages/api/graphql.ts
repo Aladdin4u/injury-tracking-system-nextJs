@@ -189,6 +189,37 @@ builder.mutationField("createReport", t =>
   })
 )
 
+builder.mutationField("editReport", t =>
+  t.prismaField({
+    type: "Report",
+    args: {
+      id: t.arg.id({ required: true }),
+      name: t.arg.string({ required: true }),
+      date: t.arg.string({ required: true }),
+      bodymaps: t.arg({
+        type: [BodyMapInput],
+        required: true,
+      }),
+      email: t.arg.string({ required: true }),
+    },
+    resolve: async (query, _parent, args, _info) =>
+      prisma.report.update({
+        ...query,
+        where: {
+          id: Number(args.id),
+        },
+        data: {
+          name: args.name,
+          date: args.date,
+          bodymaps: { update: args.bodymaps ?? [] },
+          user: {
+            connect: { email: args.email },
+          },
+        },
+      }),
+  })
+)
+
 const schema = builder.toSchema()
 
 export default createYoga<{

@@ -1,20 +1,23 @@
-import React, { useState } from "react"
-import { useSession } from "next-auth/react";
-import Layout from "../components/Layout"
-import Router from "next/router"
+import Layout from "../../components/Layout"
+import Router, { useRouter } from "next/router"
 import gql from "graphql-tag"
 import { useMutation } from "@apollo/client"
-import { authOptions } from './api/auth/[...nextauth]';
+import client from "../../lib/apollo-client"
+import { ReportProps } from "../../components/Report"
+import { GetServerSideProps } from "next";
+import { authOptions } from '../api/auth/[...nextauth]';
 import { getServerSession } from "next-auth/next";
+import { useState } from "react"
 
-const CreateReportMutation = gql`
-  mutation CreateReportMutation(
+const EditReportMutation = gql`
+  mutation EditReportMutation(
+    $id: Int!
     $name: String!
     $date: String!
     $email: String!
     $bodymaps: [BodyMapInput!]!
   ) {
-    createReport(name: $name, date: $date, bodymaps: $bodymaps email: $email) {
+    editReport(id: $id, name: $name, date: $date, bodymaps: $bodymaps email: $email) {
       id
       name
       date
@@ -30,15 +33,23 @@ const CreateReportMutation = gql`
   }
 `
 
-function Report() {
-  const { data: session } = useSession();
+interface BodyMap {
+  id: number;
+  label: string;
+  details: string;
+}
+
+const Edit: React.FC<{ data: { report: ReportProps, session:any } }> = (props) => {
+  const id = useRouter().query.id
+  const [editReport] = useMutation(EditReportMutation)
+
   interface BodyMap {
     label: string;
     details: string;
   }
-  const [name, setName] = useState("")
-  const [date, setDate] = useState("")
-  const [email, setEmail] = useState(session?.user?.email)
+  const [name, setName] = useState(props.data.report.name)
+  const [date, setDate] = useState(props.data.report.date)
+  const [email, setEmail] = useState("")
   const [bodymaps, setBodymaps] = useState<BodyMap[]>([
     { label: "left hand",
       details: "my left hand got hurt"
@@ -47,24 +58,17 @@ function Report() {
       details: "my rigt hand got hurt"
     },
   ])
-  
-
-  const [createReport] =
-    useMutation(CreateReportMutation)
-  
-  const handleBodyMaps = () => {
-    // 
-  }
 
   return (
     <Layout>
       <div>
-        <form
+      <form
           onSubmit={async (e) => {
             e.preventDefault()
 
-            await createReport({
+            await editReport({
               variables: {
+                id,
                 name,
                 date,
                 bodymaps,
@@ -74,7 +78,7 @@ function Report() {
             Router.push("/")
           }}
         >
-          <h1>Create Report</h1>
+          <h1>Edit Report</h1>
           <input
             autoFocus
             onChange={(e) => setName(e.target.value)}
@@ -96,7 +100,7 @@ function Report() {
           <input
             disabled={!date || !name}
             type="submit"
-            value="Create"
+            value="Update"
           />
           <a className="back" href="#" onClick={() => Router.push("/")}>
             or Cancel
@@ -135,8 +139,6 @@ function Report() {
   )
 }
 
-export default Report
-
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerSession(context.req, context.res, authOptions)
   if (!session) {
@@ -147,9 +149,35 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     }
   }
+  const id = Number(Array.isArray(context.params?.id) ? context.params?.id[0] : context.params?.id)
+  const { data } = await client.query({
+    query: gql`
+      query ReportQuery($id: ID!) {
+        report(id: $id) {
+          id
+          name
+          date
+          bodymaps {
+            id
+            label
+            details
+          }
+          user {
+            id
+            name
+          }
+        }
+      }
+    `,
+    variables: { id },
+  });
+
   return {
     props: {
+      data,
       session
     },
   };
 }
+
+export default Edit

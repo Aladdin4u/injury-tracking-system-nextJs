@@ -9,6 +9,7 @@ scalar DateTime
 
 type Mutation {
   createReport(name: String!, date: String!, email: String! bodymaps: BodyMapInput!): Report
+  editReport(id: Int!, name: String!, date: String!, email: String! bodymaps: BodyMapInput!): Report
   deleteReport(reportId: String): Report
   signupUser(email: String!, name: String!): User
 }

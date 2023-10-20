@@ -5,7 +5,6 @@ import Report, { ReportProps } from "../components/Report"
 
 
 const Blog: React.FC<{ data: { feed: ReportProps[] } }> = (props) => {
-  console.log(props)
   return (
     <Layout>
       <div className="page">
