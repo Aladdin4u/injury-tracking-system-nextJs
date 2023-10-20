@@ -70,6 +70,16 @@ builder.queryField("feed", t =>
       }),
   })
 )
+builder.queryField("users", t =>
+  t.prismaField({
+    type: ["User"],
+    resolve: async (query, _parent, _args, _info) =>
+      prisma.user.findMany({
+        ...query,
+        // where: { userId: User.id }
+      }),
+  })
+)
 
 builder.queryField("report", t =>
   t.prismaField({
@@ -84,17 +94,6 @@ builder.queryField("report", t =>
         where: {
           id: Number(args.id),
         },
-      }),
-  })
-)
-
-builder.queryField("drafts", t =>
-  t.prismaField({
-    type: ["Report"],
-    resolve: async (query, _parent, _args, _info) =>
-      prisma.report.findMany({
-        ...query,
-        // where: { published: false }
       }),
   })
 )
@@ -196,11 +195,6 @@ builder.mutationField("editReport", t =>
       id: t.arg.id({ required: true }),
       name: t.arg.string({ required: true }),
       date: t.arg.string({ required: true }),
-      bodymaps: t.arg({
-        type: [BodyMapInput],
-        required: true,
-      }),
-      email: t.arg.string({ required: true }),
     },
     resolve: async (query, _parent, args, _info) =>
       prisma.report.update({
@@ -211,10 +205,65 @@ builder.mutationField("editReport", t =>
         data: {
           name: args.name,
           date: args.date,
-          bodymaps: { update: args.bodymaps ?? [] },
-          user: {
-            connect: { email: args.email },
+        },
+      }),
+  })
+)
+
+builder.mutationField("createBodyMap", t =>
+  t.prismaField({
+    type: "BodyMap",
+    args: {
+      reportId: t.arg.id({ required: true }),
+      label: t.arg.string({ required: true }),
+      details: t.arg.string({ required: true }),
+    },
+    resolve: async (query, _parent, args, _info) =>
+      prisma.bodyMap.create({
+        ...query,
+        data: {
+          label: args.label,
+          details: args.details,
+          report: {
+            connect: { id: Number(args.reportId) },
           },
+        },
+      }),
+  })
+)
+builder.mutationField("editBodyMap", t =>
+  t.prismaField({
+    type: "BodyMap",
+    args: {
+      id: t.arg.id({ required: true }),
+      label: t.arg.string({ required: true }),
+      details: t.arg.string({ required: true }),
+    },
+    resolve: async (query, _parent, args, _info) =>
+      prisma.bodyMap.update({
+        ...query,
+        where: {
+          id: Number(args.id),
+        },
+        data: {
+          label: args.label,
+          details: args.details,
+        },
+      }),
+  })
+)
+
+builder.mutationField("deleteBodyMap", t =>
+  t.prismaField({
+    type: "BodyMap",
+    args: {
+      id: t.arg.id({ required: true }),
+    },
+    resolve: async (query, _parent, args, _info) =>
+      prisma.bodyMap.delete({
+        ...query,
+        where: {
+          id: Number(args.id),
         },
       }),
   })

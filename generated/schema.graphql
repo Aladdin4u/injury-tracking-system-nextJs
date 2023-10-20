@@ -9,8 +9,11 @@ scalar DateTime
 
 type Mutation {
   createReport(name: String!, date: String!, email: String! bodymaps: BodyMapInput!): Report
-  editReport(id: Int!, name: String!, date: String!, email: String! bodymaps: BodyMapInput!): Report
+  editReport(reportId: String, name: String!, date: String!): Report
   deleteReport(reportId: String): Report
+  createBodyMap(reportId: String, label: String!, details: String!): BodyMap
+  editBodyMap(BodyMapId: String, label: String!, details: String!): BodyMap
+  deleteBodyMap(BodyMapId: String ): BodyMap
   signupUser(email: String!, name: String!): User
 }
 
@@ -39,6 +42,7 @@ input BodyMapInput {
 }
 
 type Query {
+  users: [User]
   drafts: [Report]
   feed: [Report]
   filterReports(searchString: String): [Report]

@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import type { InferGetServerSidePropsType, GetServerSideProps } from 'next'
 import { useSession } from "next-auth/react";
 import Layout from "../components/Layout"
 import Router from "next/router"
@@ -30,8 +31,9 @@ const CreateReportMutation = gql`
   }
 `
 
-function Report() {
-  const { data: session } = useSession();
+function Report({ session }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  console.log(session)
+  // const { data: session } = useSession();
   interface BodyMap {
     label: string;
     details: string;
@@ -147,6 +149,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     }
   }
+  console.log(session);
+  
   return {
     props: {
       session

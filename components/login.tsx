@@ -14,6 +14,7 @@ export default function Login() {
   return (
     <>
       Not signed in <br />
+      <a href="/api/auth/signin">Sign in</a>
       <button onClick={() => signIn()}>Sign in</button>
     </>
   )

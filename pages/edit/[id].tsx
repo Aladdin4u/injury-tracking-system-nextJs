@@ -11,17 +11,16 @@ import { useState } from "react"
 
 const EditReportMutation = gql`
   mutation EditReportMutation(
-    $id: Int!
+    $id: ID!
     $name: String!
     $date: String!
-    $email: String!
-    $bodymaps: [BodyMapInput!]!
   ) {
-    editReport(id: $id, name: $name, date: $date, bodymaps: $bodymaps email: $email) {
+    editReport(id: $id, name: $name, date: $date) {
       id
       name
       date
       bodymaps {
+        id
         label
         details
       }
@@ -29,6 +28,45 @@ const EditReportMutation = gql`
         id
         name
       }
+    }
+  }
+`
+const CreateBodyMapMutation = gql`
+  mutation CreateBodyMapMutation(
+    $reportId: ID!
+    $label: String!
+    $details: String!
+  ) {
+    createBodyMap(reportId: $reportId, label: $label, details: $details) {
+      id
+      label
+      details
+      report {
+        id
+        name
+      }
+    }
+  }
+`
+const EditBodyMapMutation = gql`
+  mutation EditBodyMapMutation(
+    $id: ID!
+    $label: String!
+    $details: String!
+  ) {
+    editBodyMap(id: $id, label: $label, details: $details) {
+      id
+      label
+      details
+    }
+  }
+`
+const DeleteBodyMapMutation = gql`
+  mutation DeleteBodyMapMutation($id: ID!) {
+    deleteBodyMap(id: $id) {
+      id
+      label
+      details
     }
   }
 `
@@ -41,23 +79,18 @@ interface BodyMap {
 
 const Edit: React.FC<{ data: { report: ReportProps, session:any } }> = (props) => {
   const id = useRouter().query.id
+  
   const [editReport] = useMutation(EditReportMutation)
 
   interface BodyMap {
+    id: number;
     label: string;
     details: string;
   }
   const [name, setName] = useState(props.data.report.name)
   const [date, setDate] = useState(props.data.report.date)
   const [email, setEmail] = useState("")
-  const [bodymaps, setBodymaps] = useState<BodyMap[]>([
-    { label: "left hand",
-      details: "my left hand got hurt"
-    },
-    { label: "right hand",
-      details: "my rigt hand got hurt"
-    },
-  ])
+  const [bodymaps, setBodymaps] = useState<BodyMap[]>([props.data.report.bodymaps])
 
   return (
     <Layout>
@@ -71,8 +104,6 @@ const Edit: React.FC<{ data: { report: ReportProps, session:any } }> = (props) =
                 id,
                 name,
                 date,
-                bodymaps,
-                email,
               },
             })
             Router.push("/")

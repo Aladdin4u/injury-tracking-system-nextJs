@@ -43,6 +43,7 @@ const Report: React.FC<{ data: { report: ReportProps } }> = (props) => {
         <p>{props.data.report.date}</p>
         {props.data.report.bodymaps.map<BodyMap[]>((b) => 
           (<div key={b.id}>
+            <h3>{b.id}</h3>
             <h3>{b.label}</h3>
             <p>{b.details}</p>
           </div>)
