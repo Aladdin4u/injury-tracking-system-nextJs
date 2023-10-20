@@ -9,11 +9,11 @@ import type { NextApiRequest, NextApiResponse } from "next"
 import prisma from "../../lib/prisma"
 
 const builder = new SchemaBuilder<{
-  PrismaTypes: PrismaTypes,
+  PrismaTypes: PrismaTypes
   Scalars: {
     Date: {
-      Input: Date;
-      Output: Date;
+      Input: Date
+      Output: Date
     }
   }
 }>({
@@ -23,7 +23,7 @@ const builder = new SchemaBuilder<{
   },
 })
 
-builder.addScalarType("Date", DateTimeResolver, {});
+builder.addScalarType("Date", DateTimeResolver, {})
 
 builder.queryType({})
 
@@ -44,7 +44,7 @@ builder.prismaObject("Report", {
     name: t.exposeString("name"),
     date: t.exposeString("date"),
     createdAt: t.expose("createdAt", {
-      type: "Date"
+      type: "Date",
     }),
     bodymaps: t.relation("bodymaps"),
     user: t.relation("user"),
@@ -155,6 +155,12 @@ builder.mutationField("deleteReport", t =>
       }),
   })
 )
+const BodyMapInput = builder.inputType("BodyMapInput", {
+  fields: t => ({
+    label: t.string({ required: true }),
+    details: t.string({ required: true }),
+  }),
+})
 
 builder.mutationField("createReport", t =>
   t.prismaField({
@@ -162,7 +168,11 @@ builder.mutationField("createReport", t =>
     args: {
       name: t.arg.string({ required: true }),
       date: t.arg.string({ required: true }),
-      userId: t.arg.string({ required: true }),
+      bodymaps: t.arg({
+        type: [BodyMapInput],
+        required: true,
+      }),
+      email: t.arg.string({ required: true }),
     },
     resolve: async (query, _parent, args, _info) =>
       prisma.report.create({
@@ -170,8 +180,9 @@ builder.mutationField("createReport", t =>
         data: {
           name: args.name,
           date: args.date,
+          bodymaps: { create: args.bodymaps ?? [] },
           user: {
-            connect: { id: args.userId },
+            connect: { email: args.email },
           },
         },
       }),

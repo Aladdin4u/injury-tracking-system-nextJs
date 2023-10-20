@@ -8,31 +8,31 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 scalar DateTime
 
 type Mutation {
-  createReport(name: String!, date: String!, UserId: Int! bodymaps: BodyMapInput!): Report
+  createReport(name: String!, date: String!, email: String! bodymaps: BodyMapInput!): Report
   deleteReport(reportId: String): Report
   signupUser(email: String!, name: String!): User
 }
 
 type Report {
+  id: Int!
   user: User
   name: String
-  id: Int!
   date: String
   createdAt: DateTime
   updatedAt: DateTime
-  bodymaps: [BodyMap!]!
+  bodymaps: [BodyMap!]
 }
 
 type BodyMap {
-  name: String
   id: Int
+  name: String
   label: String!
   details: String!
 }
 
 input BodyMapInput {
-  name: String
   id: Int!
+  name: String
   label: String!
   details: String!
 }

@@ -1,21 +1,26 @@
 import React, { useState } from "react"
+import { useSession } from "next-auth/react";
 import Layout from "../components/Layout"
 import Router from "next/router"
 import gql from "graphql-tag"
 import { useMutation } from "@apollo/client"
 
-const CreateDraftMutation = gql`
-  mutation CreateDraftMutation(
+const CreateReportMutation = gql`
+  mutation CreateReportMutation(
     $name: String!
     $date: String!
-    $bodymaps: [String!]!
+    $email: String!
+    $bodymaps: [BodyMapInput!]!
   ) {
-    createReport(name: $name, date: $date, bodymaps: $bodymaps) {
+    createReport(name: $name, date: $date, bodymaps: $bodymaps email: $email) {
       id
       name
       date
-      bodymaps
-      author {
+      bodymaps {
+        label
+        details
+      }
+      user {
         id
         name
       }
@@ -23,13 +28,27 @@ const CreateDraftMutation = gql`
   }
 `
 
-function Draft() {
+function Report() {
+  const { data: session } = useSession();
+  interface BodyMap {
+    label: string;
+    details: string;
+  }
   const [name, setName] = useState("")
   const [date, setDate] = useState("")
-  const [bodymaps, setBodymaps] = useState([])
+  const [email, setEmail] = useState(session?.user?.email)
+  const [bodymaps, setBodymaps] = useState<BodyMap[]>([
+    { label: "left hand",
+      details: "my left hand got hurt"
+    },
+    { label: "right hand",
+      details: "my rigt hand got hurt"
+    },
+  ])
+  
 
   const [createReport] =
-    useMutation(CreateDraftMutation)
+    useMutation(CreateReportMutation)
   
   const handleBodyMaps = () => {
     // 
@@ -47,12 +66,13 @@ function Draft() {
                 name,
                 date,
                 bodymaps,
+                email,
               },
             })
-            Router.push("/drafts")
+            Router.push("/")
           }}
         >
-          <h1>Create Draft</h1>
+          <h1>Create Report</h1>
           <input
             autoFocus
             onChange={(e) => setName(e.target.value)}
@@ -65,14 +85,14 @@ function Draft() {
               type="date"
               value={date}
             />
-          <input
-            onChange={handleBodyMaps}
+          {/* <input
+            // onChange={e.target.value}
             placeholder="details"
             type="text"
-            value={bodymaps}
-          />
+            // value={bodymaps}
+          /> */}
           <input
-            disabled={!date || !name || !bodymaps}
+            disabled={!date || !name}
             type="submit"
             value="Create"
           />
@@ -113,4 +133,4 @@ function Draft() {
   )
 }
 
-export default Draft
+export default Report
