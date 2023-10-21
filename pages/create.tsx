@@ -1,12 +1,15 @@
 import React, { useState } from "react"
-import type { InferGetServerSidePropsType, GetServerSideProps } from 'next'
-import { useSession } from "next-auth/react";
+import type { GetServerSideProps } from "next"
+import { useSession } from "next-auth/react"
 import Layout from "../components/Layout"
 import Router from "next/router"
 import gql from "graphql-tag"
 import { useMutation } from "@apollo/client"
-import { authOptions } from './api/auth/[...nextauth]';
-import { getServerSession } from "next-auth/next";
+import { authOptions } from "./api/auth/[...nextauth]"
+import { getServerSession } from "next-auth/next"
+import { CloseOutlined, UserOutlined } from "@ant-design/icons"
+import { Button, Card, Form, Input, DatePicker } from "antd"
+import Link from 'next/link';
 
 const CreateReportMutation = gql`
   mutation CreateReportMutation(
@@ -15,7 +18,7 @@ const CreateReportMutation = gql`
     $email: String!
     $bodymaps: [BodyMapInput!]!
   ) {
-    createReport(name: $name, date: $date, bodymaps: $bodymaps email: $email) {
+    createReport(name: $name, date: $date, bodymaps: $bodymaps, email: $email) {
       id
       name
       date
@@ -31,129 +34,121 @@ const CreateReportMutation = gql`
   }
 `
 
-function Report({ session }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  console.log(session)
-  // const { data: session } = useSession();
-  interface BodyMap {
-    label: string;
-    details: string;
-  }
-  const [name, setName] = useState("")
-  const [date, setDate] = useState("")
+function Report() {
+  // console.log(session)
+  const { data: session } = useSession()
   const [email, setEmail] = useState(session?.user?.email)
-  const [bodymaps, setBodymaps] = useState<BodyMap[]>([
-    { label: "left hand",
-      details: "my left hand got hurt"
-    },
-    { label: "right hand",
-      details: "my rigt hand got hurt"
-    },
-  ])
-  
-
-  const [createReport] =
-    useMutation(CreateReportMutation)
-  
-  const handleBodyMaps = () => {
-    // 
+  const [createReport] = useMutation(CreateReportMutation)
+  const onFinish = async (values: any) => {
+    let data = {
+      name: values.name,
+      date: values["date"].format("YYYY-MM-DD HH:mm:ss"),
+      bodymaps: values.BodyMaps,
+      email: email,
+    }
+    console.log("Received values of form: ", data)
+    await createReport({
+      variables: data,
+    })
+    Router.push("/")
   }
 
   return (
     <Layout>
-      <div>
-        <form
-          onSubmit={async (e) => {
-            e.preventDefault()
-
-            await createReport({
-              variables: {
-                name,
-                date,
-                bodymaps,
-                email,
-              },
-            })
-            Router.push("/")
-          }}
+      <Form
+        name="create-report"
+        className="login-form"
+        initialValues={{ remember: true }}
+        onFinish={onFinish}
+      >
+        <Form.Item
+          name="name"
+          label="Reporter Name"
+          rules={[
+            { required: true, message: "Please input your Reporter Name!" },
+          ]}
         >
-          <h1>Create Report</h1>
-          <input
-            autoFocus
-            onChange={(e) => setName(e.target.value)}
+          <Input
+            prefix={<UserOutlined className="site-form-item-icon" />}
             placeholder="Reporter Name"
-            type="text"
-            value={name}
           />
-            <input
-              onChange={(e) => setDate(e.target.value)}
-              type="date"
-              value={date}
-            />
-          {/* <input
-            // onChange={e.target.value}
-            placeholder="details"
-            type="text"
-            // value={bodymaps}
-          /> */}
-          <input
-            disabled={!date || !name}
-            type="submit"
-            value="Create"
-          />
-          <a className="back" href="#" onClick={() => Router.push("/")}>
-            or Cancel
-          </a>
-        </form>
-      </div>
-      <style jsx>{`
-        .page {
-          background: white;
-          padding: 3rem;
-          display: flex;
-          justify-date: center;
-          align-items: center;
-        }
+        </Form.Item>
+        <Form.Item
+          name="date"
+          label="Date Time"
+          rules={[{ required: true, message: "Please input your Date!" }]}
+        >
+          <DatePicker format="YYYY-MM-DD HH:mm:ss" />
+        </Form.Item>
+        <Form.List name="BodyMaps">
+          {(fields, { add, remove }) => (
+            <div
+              style={{
+                display: "flex",
+                rowGap: 16,
+                flexDirection: "column",
+              }}
+            >
+              {fields.map(field => (
+                <Card
+                  size="small"
+                  title={`List Injury ${field.name + 1}`}
+                  key={field.key}
+                  extra={
+                    <CloseOutlined
+                      onClick={() => {
+                        remove(field.name)
+                      }}
+                    />
+                  }
+                >
+                  <Form.Item label="label" name={[field.name, "label"]}>
+                    <Input placeholder="Label" />
+                  </Form.Item>
+                  <Form.Item label="Description" name={[field.name, "details"]}>
+                    <Input placeholder="Describe the Injury" />
+                  </Form.Item>
+                </Card>
+              ))}
 
-        input[type="text"],
-        textarea {
-          width: 100%;
-          padding: 0.5rem;
-          margin: 0.5rem 0;
-          border-radius: 0.25rem;
-          border: 0.125rem solid rgba(0, 0, 0, 0.2);
-        }
+              <Button type="dashed" onClick={() => add()} block>
+                + Add Item
+              </Button>
+            </div>
+          )}
+        </Form.List>
 
-        input[type="submit"] {
-          background: #ececec;
-          border: 0;
-          padding: 1rem 2rem;
-        }
-
-        .back {
-          margin-left: 1rem;
-        }
-      `}</style>
+        <Form.Item>
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="login-form-button"
+          >
+            Create
+          </Button>
+          Or <Link href="/">Cancel</Link>
+        </Form.Item>
+      </Form>
     </Layout>
   )
 }
 
 export default Report
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async context => {
   const session = await getServerSession(context.req, context.res, authOptions)
   if (!session) {
     return {
       redirect: {
-        destination: '/',
+        destination: "/",
         permanent: false,
       },
     }
   }
-  console.log(session);
-  
+
   return {
     props: {
-      session
+      session,
     },
-  };
+  }
 }

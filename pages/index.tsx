@@ -3,34 +3,16 @@ import gql from "graphql-tag"
 import client from "../lib/apollo-client"
 import Report, { ReportProps } from "../components/Report"
 
-
-const Blog: React.FC<{ data: { feed: ReportProps[] } }> = (props) => {
+const Blog: React.FC<{ data: { feed: ReportProps[] } }> = props => {
   return (
     <Layout>
-      <div className="page">
-        <h1>My Blog</h1>
-        <main>
-          {props.data.feed.map(post => (
-            <div key={post.id} className="post">
-              <Report post={post} />
-            </div>
-          ))}
-        </main>
-      </div>
-      <style jsx>{`
-        .post {
-          background: white;
-          transition: box-shadow 0.1s ease-in;
-        }
-
-        .post:hover {
-          box-shadow: 1px 1px 3px #aaa;
-        }
-
-        .post + .post {
-          margin-top: 2rem;
-        }
-      `}</style>
+      <main>
+        {props.data.feed.map(post => (
+          <div key={post.id} className="post">
+            <Report post={post} />
+          </div>
+        ))}
+      </main>
     </Layout>
   )
 }
@@ -57,13 +39,13 @@ export async function getServerSideProps() {
         }
       }
     `,
-  });
+  })
 
   return {
     props: {
-      data
+      data,
     },
-  };
+  }
 }
 
 export default Blog

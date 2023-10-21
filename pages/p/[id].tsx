@@ -22,7 +22,7 @@ const DeleteMutation = gql`
   }
 `
 
-interface BodyMap {
+type BodyMap = {
   id: number;
   label: string;
   details: string;
@@ -33,6 +33,7 @@ const Report: React.FC<{ data: { report: ReportProps } }> = (props) => {
   const [deleteReport] = useMutation(DeleteMutation)
 
   let name = props.data.report.name
+  const bodyMaps:BodyMap[] = props.data.report.bodymaps
 
   const authorName = props.data.report.user ? props.data.report.user.name : "Unknown user"
   return (
@@ -41,7 +42,7 @@ const Report: React.FC<{ data: { report: ReportProps } }> = (props) => {
         <h2>{name}</h2>
         <p>By {authorName}</p>
         <p>{props.data.report.date}</p>
-        {props.data.report.bodymaps.map<BodyMap[]>((b) => 
+        {bodyMaps.map((b) => 
           (<div key={b.id}>
             <h3>{b.id}</h3>
             <h3>{b.label}</h3>

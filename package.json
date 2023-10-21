@@ -16,6 +16,7 @@
     "@pothos/core": "3.38.0",
     "@pothos/plugin-prisma": "3.61.0",
     "@prisma/client": "^5.4.2",
+    "antd": "^5.10.2",
     "graphql": "16.8.1",
     "graphql-scalars": "1.22.4",
     "graphql-yoga": "4.0.5",
@@ -23,7 +24,8 @@
     "next-auth": "^4.24.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-markdown": "8.0.7"
+    "react-markdown": "8.0.7",
+    "styled-components": "^6.1.0"
   },
   "devDependencies": {
     "@types/graphql": "14.5.0",
