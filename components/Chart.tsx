@@ -31,19 +31,31 @@ export const plugin = {
     if (image.complete) {
       const ctx = chart.ctx
       const { top, left, width, height } = chart.chartArea
-      const x = left + width / 2 - image.width / 2
-      const y = top + height / 2 - image.height / 2
-      ctx.drawImage(image, x, y)
+      const x = left
+      const y = top
+      ctx.drawImage(image, x, y, width, height)
     } else {
       image.onload = () => chart.draw()
     }
   },
 }
 
+const footer = tooltipItems => {
+  return "cat"
+}
+const toolChart = tooltipItems => {
+  return ""
+}
+
 export const options = {
   scales: {
+    x: {
+      min: 0,
+      max: 100,
+    },
     y: {
-      beginAtZero: true,
+      min: 0,
+      max: 100,
     },
   },
   elements: {
@@ -51,8 +63,18 @@ export const options = {
       pointStyle: "circle",
     },
     line: {
-        borderWidth: 10,
-    }
+      borderWidth: 10,
+    },
+  },
+  plugins: {
+    tooltip: {
+      yAlign: "bottom",
+      displayColors: false,
+      callback: {
+        footer: footer,
+        label: toolChart,
+      },
+    },
   },
 }
 
@@ -62,20 +84,12 @@ export const data = {
       label: "A dataset",
       data: [
         {
-          x: 10,
-          y: 0,
+          x: 29,
+          y: 90,
         },
         {
-          x: 0,
-          y: 10,
-        },
-        {
-          x: 10,
-          y: 5,
-        },
-        {
-          x: 5,
-          y: 5.5,
+          x: 39,
+          y: 90,
         },
       ],
       backgroundColor: "rgba(255, 99, 132, 1)",
