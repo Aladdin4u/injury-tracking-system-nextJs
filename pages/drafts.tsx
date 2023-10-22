@@ -2,19 +2,20 @@ import Layout from "../components/Layout"
 import gql from "graphql-tag"
 import client from "../lib/apollo-client"
 import Report, { ReportProps } from "../components/Report"
+import Chart from "../components/Chart"
 
-
-const Drafts: React.FC<{ data: { drafts: ReportProps[] } }> = (props) => {
+const Drafts: React.FC<{ data: { drafts: ReportProps[] } }> = props => {
   return (
     <Layout>
       <div className="page">
         <h1>Drafts</h1>
         <main>
-          {props.data.drafts.map((post) => (
+          <Chart />
+          {/* {props.data.drafts.map((post) => (
             <div key={post.id} className="post">
               <Report post={post} />
             </div>
-          ))}
+          ))} */}
         </main>
       </div>
       <style jsx>{`
@@ -35,29 +36,29 @@ const Drafts: React.FC<{ data: { drafts: ReportProps[] } }> = (props) => {
   )
 }
 
-export const getServerSideProps = async () => {
-  const { data } = await client.query({
-    query: gql`
-      query DraftsQuery {
-        drafts {
-          id
-          title
-          content
-          published
-          author {
-            id
-            name
-          }
-        }
-      }
-    `,
-  });
+// export const getServerSideProps = async () => {
+//   const { data } = await client.query({
+//     query: gql`
+//       query DraftsQuery {
+//         drafts {
+//           id
+//           title
+//           content
+//           published
+//           author {
+//             id
+//             name
+//           }
+//         }
+//       }
+//     `,
+//   });
 
-  return {
-    props: {
-      data
-    },
-  };
-}
+//   return {
+//     props: {
+//       data
+//     },
+//   };
+// }
 
 export default Drafts
