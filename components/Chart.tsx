@@ -11,6 +11,43 @@ import { Scatter } from "react-chartjs-2"
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend)
 
+const bodyMap = [
+  "Face",
+  "Right Jaw",
+  "Left Jaw",
+  "Right Chest/Breast",
+  "Left Chest/Breast",
+  "Right Upper Arm",
+  "left Upper Arm",
+  "Right Elbow",
+  "Left Elbow",
+  "Right Lower Arm",
+  "Left Upper Arm",
+  "Right Wrist/Hand",
+  "Left Wrist/Hand",
+  "Abdomen",
+  "Pelvis",
+  "Right Groin",
+  "Left Groin",
+  "Right Upper Leg",
+  "Left Upper Leg",
+  "Right Knee",
+  "Left Knee",
+  "Right Lower Leg",
+  "Left Lower Leg",
+  "Right Ankle/Foot",
+  "Left Ankle/Foot",
+  "Head",
+  "Neck",
+  "Left Shoulder",
+  "Right Shoulder",
+  "Upper Back",
+  "Lower Back",
+  "Right Hip",
+  "Left Hip",
+  "Left Buttocks",
+  "Right Buttocks",
+]
 interface Window {
   Image: {
     prototype: HTMLImageElement
@@ -40,11 +77,9 @@ export const plugin = {
   },
 }
 
-const footer = tooltipItems => {
-  return "cat"
-}
-const toolChart = tooltipItems => {
-  return ""
+const toolChart = (tooltipItems) => {
+  console.log(tooltipItems.dataset.data)
+  return tooltipItems.dataset.data.map((t,i) => bodyMap[i])
 }
 
 export const options = {
@@ -70,8 +105,7 @@ export const options = {
     tooltip: {
       yAlign: "bottom",
       displayColors: false,
-      callback: {
-        footer: footer,
+      callbacks: {
         label: toolChart,
       },
     },
@@ -81,15 +115,147 @@ export const options = {
 export const data = {
   datasets: [
     {
-      label: "A dataset",
+      label: "Body Map Area",
       data: [
         {
           x: 29,
           y: 90,
         },
         {
-          x: 39,
+          x: 27,
+          y: 86,
+        },
+        {
+          x: 31,
+          y: 86,
+        },
+        {
+          x: 25,
+          y: 70,
+        },
+        {
+          x: 33,
+          y: 70,
+        },
+        {
+          x: 17,
+          y: 70,
+        },
+        {
+          x: 40,
+          y: 70,
+        },
+        {
+          x: 17,
+          y: 60,
+        },
+        {
+          x: 40,
+          y: 60,
+        },
+        {
+          x: 16,
+          y: 55,
+        },
+        {
+          x: 41,
+          y: 55,
+        },
+        {
+          x: 15,
+          y: 50,
+        },
+        {
+          x: 42,
+          y: 50,
+        },
+        {
+          x: 28.5,
+          y: 56,
+        },
+        {
+          x: 28.5,
+          y: 50,
+        },
+        {
+          x: 24,
+          y: 49,
+        },
+        {
+          x: 33,
+          y: 49,
+        },
+        {
+          x: 24,
+          y: 40,
+        },
+        {
+          x: 33,
+          y: 40,
+        },
+        {
+          x: 25,
+          y: 30,
+        },
+        {
+          x: 32,
+          y: 30,
+        },
+        {
+          x: 26,
+          y: 20,
+        },
+        {
+          x: 32,
+          y: 20,
+        },
+        {
+          x: 26,
+          y: 10,
+        },
+        {
+          x: 31,
+          y: 10,
+        },
+        {
+          x: 71,
           y: 90,
+        },
+        {
+          x: 71,
+          y: 80,
+        },
+        {
+          x: 60,
+          y: 70,
+        },
+        {
+          x: 82,
+          y: 70,
+        },
+        {
+          x: 71,
+          y: 70,
+        },
+        {
+          x: 71,
+          y: 59,
+        },
+        {
+          x: 66,
+          y: 56,
+        },
+        {
+          x: 76,
+          y: 56,
+        },
+        {
+          x: 67,
+          y: 47,
+        },
+        {
+          x: 76,
+          y: 47,
         },
       ],
       backgroundColor: "rgba(255, 99, 132, 1)",
