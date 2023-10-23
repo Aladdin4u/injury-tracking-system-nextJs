@@ -9,7 +9,7 @@ const Drafts: React.FC<{ data: { drafts: ReportProps[] } }> = props => {
     <Layout>
       <div className="page">
         <h1>Drafts</h1>
-        <main style={{width:"50%", height:"50%"}}>
+        <main>
           <Chart />
           {/* {props.data.drafts.map((post) => (
             <div key={post.id} className="post">

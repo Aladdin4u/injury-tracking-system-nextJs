@@ -11,43 +11,6 @@ import { Scatter } from "react-chartjs-2"
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend)
 
-const bodyMap = [
-  "Face",
-  "Right Jaw",
-  "Left Jaw",
-  "Right Chest/Breast",
-  "Left Chest/Breast",
-  "Right Upper Arm",
-  "left Upper Arm",
-  "Right Elbow",
-  "Left Elbow",
-  "Right Lower Arm",
-  "Left Upper Arm",
-  "Right Wrist/Hand",
-  "Left Wrist/Hand",
-  "Abdomen",
-  "Pelvis",
-  "Right Groin",
-  "Left Groin",
-  "Right Upper Leg",
-  "Left Upper Leg",
-  "Right Knee",
-  "Left Knee",
-  "Right Lower Leg",
-  "Left Lower Leg",
-  "Right Ankle/Foot",
-  "Left Ankle/Foot",
-  "Head",
-  "Neck",
-  "Left Shoulder",
-  "Right Shoulder",
-  "Upper Back",
-  "Lower Back",
-  "Right Hip",
-  "Left Hip",
-  "Left Buttocks",
-  "Right Buttocks",
-]
 interface Window {
   Image: {
     prototype: HTMLImageElement
@@ -77,9 +40,9 @@ export const plugin = {
   },
 }
 
-const toolChart = (tooltipItems) => {
-  console.log(tooltipItems.dataset.data)
-  return tooltipItems.dataset.data.map((t,i) => bodyMap[i])
+const toolChart = tooltipItems => {
+  console.log(tooltipItems.label)
+  return tooltipItems.label
 }
 
 export const options = {
@@ -87,18 +50,27 @@ export const options = {
     x: {
       min: 0,
       max: 100,
+      grid: {
+        display: false,
+      },
+      ticks: {
+        display: false,
+      },
     },
     y: {
       min: 0,
       max: 100,
+      grid: {
+        display: false,
+      },
+      ticks: {
+        display: false,
+      },
     },
   },
   elements: {
     point: {
       pointStyle: "circle",
-    },
-    line: {
-      borderWidth: 10,
     },
   },
   plugins: {
@@ -107,26 +79,66 @@ export const options = {
       displayColors: false,
       callbacks: {
         label: toolChart,
+        title: () => {
+          return ""
+        },
       },
     },
   },
 }
 
 export const data = {
+  labels: [
+    "Face",
+    "Right Jaw",
+    "Left Jaw",
+    "Right Chest/Breast",
+    "Left Chest/Breast",
+    "Right Upper Arm",
+    "left Upper Arm",
+    "Right Elbow",
+    "Left Elbow",
+    "Right Lower Arm",
+    "Left Upper Arm",
+    "Right Wrist/Hand",
+    "Left Wrist/Hand",
+    "Abdomen",
+    "Pelvis",
+    "Right Groin",
+    "Left Groin",
+    "Right Upper Leg",
+    "Left Upper Leg",
+    "Right Knee",
+    "Left Knee",
+    "Right Lower Leg",
+    "Left Lower Leg",
+    "Right Ankle/Foot",
+    "Left Ankle/Foot",
+    "Head",
+    "Neck",
+    "Left Shoulder",
+    "Right Shoulder",
+    "Upper Back",
+    "Lower Back",
+    "Right Hip",
+    "Left Hip",
+    "Left Buttocks",
+    "Right Buttocks",
+  ],
   datasets: [
     {
-      label: "Body Map Area",
+      label: "Body Map Injury",
       data: [
         {
-          x: 29,
+          x: 28.7,
           y: 90,
         },
         {
-          x: 27,
+          x: 26,
           y: 86,
         },
         {
-          x: 31,
+          x: 31.2,
           y: 86,
         },
         {
@@ -170,11 +182,11 @@ export const data = {
           y: 50,
         },
         {
-          x: 28.5,
+          x: 28.7,
           y: 56,
         },
         {
-          x: 28.5,
+          x: 28.7,
           y: 50,
         },
         {
@@ -218,11 +230,11 @@ export const data = {
           y: 10,
         },
         {
-          x: 71,
+          x: 71.2,
           y: 90,
         },
         {
-          x: 71,
+          x: 71.2,
           y: 80,
         },
         {
@@ -234,11 +246,11 @@ export const data = {
           y: 70,
         },
         {
-          x: 71,
+          x: 71.2,
           y: 70,
         },
         {
-          x: 71,
+          x: 71.2,
           y: 59,
         },
         {
