@@ -40,6 +40,11 @@ function Report() {
   const { data: session } = useSession()
   const [email, setEmail] = useState(session?.user?.email)
   const [createReport] = useMutation(CreateReportMutation)
+  const [label, setLabel] = useState("")
+
+  const handleLabel = (e: any) => {
+    setLabel(e.target.value)
+  }
 
   const onFinish = async (values: any) => {
     let data = {
@@ -64,7 +69,13 @@ function Report() {
       <Form
         name="create-report"
         className="login-form"
-        initialValues={{ remember: true }}
+        // initialValues={{
+        //   BodyMaps: [
+        //     {
+        //       label: label,
+        //     },
+        //   ],
+        // }}
         onFinish={onFinish}
       >
         <Form.Item
@@ -98,8 +109,8 @@ function Report() {
               <Chart
                 options={{
                   onClick: (event: any) => {
-                    console.log("add=", event.chart.tooltip.dataPoints[0].label)
-                    add(event.chart.tooltip.dataPoints[0].label)
+                    add()
+                    setLabel(event.chart.tooltip.dataPoints[0].label)
                   },
                   scales: {
                     x: {
@@ -156,10 +167,29 @@ function Report() {
                     />
                   }
                 >
-                  <Form.Item label="label" name={[field.name, "label"]}>
-                    <Input placeholder="Label" />
+                  <Form.Item
+                    label="label"
+                    name={[field.name, "label"]}
+                    initialValue={label}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please input Injury Label!",
+                      },
+                    ]}
+                  >
+                    <Input placeholder="Label" disabled />
                   </Form.Item>
-                  <Form.Item label="Description" name={[field.name, "details"]}>
+                  <Form.Item
+                    label="Description"
+                    name={[field.name, "details"]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please input Injury description!",
+                      },
+                    ]}
+                  >
                     <Input placeholder="Describe the Injury" />
                   </Form.Item>
                 </Card>
@@ -167,7 +197,7 @@ function Report() {
             </div>
           )}
         </Form.List>
-        <Space>
+        <Space direction="vertical">
           <Form.Item>
             <Button
               type="primary"

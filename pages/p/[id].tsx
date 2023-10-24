@@ -50,7 +50,7 @@ const Report: React.FC<{ data: { report: ReportProps } }> = (props) => {
           </div>)
           )}
         
-        <button onClick={() => Router.push("/edit/[id]", `/edit/${id}`)}>update</button>
+        <button onClick={() => Router.push("/edit/[id]", `/edit/${id}`)}>Edit</button>
         <button
           onClick={async e => {
             await deleteReport({
