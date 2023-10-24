@@ -7,7 +7,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js"
-import { Scatter } from "react-chartjs-2"
+import { Scatter, ChartData } from "react-chartjs-2"
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend)
 
@@ -27,7 +27,7 @@ if (typeof window !== "undefined") {
 
 export const plugin = {
   id: "customCanvasBackgroundImage",
-  beforeDraw: chart => {
+  beforeDraw: (chart: any) => {
     if (image.complete) {
       const ctx = chart.ctx
       const { top, left, width, height } = chart.chartArea
@@ -37,53 +37,6 @@ export const plugin = {
     } else {
       image.onload = () => chart.draw()
     }
-  },
-}
-
-const toolChart = tooltipItems => {
-  console.log(tooltipItems.label)
-  return tooltipItems.label
-}
-
-export const options = {
-  scales: {
-    x: {
-      min: 0,
-      max: 100,
-      grid: {
-        display: false,
-      },
-      ticks: {
-        display: false,
-      },
-    },
-    y: {
-      min: 0,
-      max: 100,
-      grid: {
-        display: false,
-      },
-      ticks: {
-        display: false,
-      },
-    },
-  },
-  elements: {
-    point: {
-      pointStyle: "circle",
-    },
-  },
-  plugins: {
-    tooltip: {
-      yAlign: "bottom",
-      displayColors: false,
-      callbacks: {
-        label: toolChart,
-        title: () => {
-          return ""
-        },
-      },
-    },
   },
 }
 
@@ -275,6 +228,8 @@ export const data = {
   ],
 }
 
-export default function Chart() {
+const Chart:React.FC<ChartData> = ({ options }) => {
+  
   return <Scatter options={options} data={data} plugins={[plugin]} />
 }
+export default Chart

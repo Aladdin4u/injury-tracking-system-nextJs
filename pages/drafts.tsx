@@ -2,7 +2,6 @@ import Layout from "../components/Layout"
 import gql from "graphql-tag"
 import client from "../lib/apollo-client"
 import Report, { ReportProps } from "../components/Report"
-import Chart from "../components/Chart"
 
 const Drafts: React.FC<{ data: { drafts: ReportProps[] } }> = props => {
   return (
@@ -10,7 +9,7 @@ const Drafts: React.FC<{ data: { drafts: ReportProps[] } }> = props => {
       <div className="page">
         <h1>Drafts</h1>
         <main>
-          <Chart />
+          <p>draft goes here</p>
           {/* {props.data.drafts.map((post) => (
             <div key={post.id} className="post">
               <Report post={post} />

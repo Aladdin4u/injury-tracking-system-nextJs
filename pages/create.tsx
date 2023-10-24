@@ -8,8 +8,9 @@ import { useMutation } from "@apollo/client"
 import { authOptions } from "./api/auth/[...nextauth]"
 import { getServerSession } from "next-auth/next"
 import { CloseOutlined, UserOutlined } from "@ant-design/icons"
-import { Button, Card, Form, Input, DatePicker } from "antd"
-import Link from 'next/link';
+import { Button, Card, Form, Input, DatePicker, Space } from "antd"
+import Link from "next/link"
+import Chart from "../components/Chart"
 
 const CreateReportMutation = gql`
   mutation CreateReportMutation(
@@ -39,6 +40,7 @@ function Report() {
   const { data: session } = useSession()
   const [email, setEmail] = useState(session?.user?.email)
   const [createReport] = useMutation(CreateReportMutation)
+
   const onFinish = async (values: any) => {
     let data = {
       name: values.name,
@@ -51,6 +53,10 @@ function Report() {
       variables: data,
     })
     Router.push("/")
+  }
+
+  const toolChart = (tooltipItems: any) => {
+    return tooltipItems.label
   }
 
   return (
@@ -89,6 +95,54 @@ function Report() {
                 flexDirection: "column",
               }}
             >
+              <Chart
+                options={{
+                  onClick: (event: any) => {
+                    console.log("add=", event.chart.tooltip.dataPoints[0].label)
+                    add(event.chart.tooltip.dataPoints[0].label)
+                  },
+                  scales: {
+                    x: {
+                      min: 0,
+                      max: 100,
+                      grid: {
+                        display: false,
+                      },
+                      ticks: {
+                        display: false,
+                      },
+                    },
+                    y: {
+                      min: 0,
+                      max: 100,
+                      grid: {
+                        display: false,
+                      },
+                      ticks: {
+                        display: false,
+                      },
+                    },
+                  },
+                  elements: {
+                    point: {
+                      pointStyle: "circle",
+                    },
+                  },
+                  plugins: {
+                    tooltip: {
+                      yAlign: "bottom",
+                      displayColors: false,
+                      callbacks: {
+                        events: ["click"],
+                        label: toolChart,
+                        title: () => {
+                          return ""
+                        },
+                      },
+                    },
+                  },
+                }}
+              />
               {fields.map(field => (
                 <Card
                   size="small"
@@ -110,24 +164,21 @@ function Report() {
                   </Form.Item>
                 </Card>
               ))}
-
-              <Button type="dashed" onClick={() => add()} block>
-                + Add Item
-              </Button>
             </div>
           )}
         </Form.List>
-
-        <Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            className="login-form-button"
-          >
-            Create
-          </Button>
-          Or <Link href="/">Cancel</Link>
-        </Form.Item>
+        <Space>
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="login-form-button"
+            >
+              Create
+            </Button>
+            Or <Link href="/">Cancel</Link>
+          </Form.Item>
+        </Space>
       </Form>
     </Layout>
   )
