@@ -7,6 +7,7 @@ export type ReportProps = {
   name: string;
   createdAt: Date;
   bodymaps: {
+    map(arg0: (body: any) => { id: any; label: any; details: any; }): any;
     id: number;
     label: string;
     details: string;
