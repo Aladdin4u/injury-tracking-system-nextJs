@@ -81,10 +81,7 @@ const Edit: React.FC<{
   const [date, setDate] = useState(dayjs(props.data.report.date))
   const [bodyMaps, setBodyMaps] = useState(props.data.report.bodymaps)
   const [label, setLabel] = useState("")
-
-  const handleLabel = (e: any) => {
-    setLabel(e.target.value)
-  }
+  const [ListId, setListId] = useState(0)
 
   const onFinish = async (values: any) => {
     let data = {
@@ -99,13 +96,8 @@ const Edit: React.FC<{
   }
 
   const onEditBodyMap = async (values: any) => {
-    let b = bodyMaps.map(body => body)
-    const data = {
-      id: b[values].id,
-      label: b[values].label,
-      details: b[values].details,
-    }
-    console.log("Received values of form: ", data, b[values])
+    let data = values.BodyMaps[ListId]
+    console.log("Received values of form: ", data)
     await editBodyMap({
       variables: data,
     })
@@ -123,12 +115,6 @@ const Edit: React.FC<{
     })
   }
   const onCreateBodyMap = async (values: any) => {
-    let bodys = values.BodyMaps.map((body: any) => {
-      return {
-        label: body.label,
-        details: body.details,
-      }
-    })
     let data = {
       reportId: id,
       label: values.BodyMaps[0].label,
@@ -196,6 +182,7 @@ const Edit: React.FC<{
           initialValues={{
             BodyMaps: bodyMaps,
           }}
+          onFinish={onEditBodyMap}
         >
           <Form.List name="BodyMaps">
             {fields => (
@@ -250,12 +237,12 @@ const Edit: React.FC<{
                         </Form.Item>
                       </Col>
                       <Col className="gutter-row" span={2}>
-                        <Form.Item>
+                        <Form.Item name={[field.name, "id"]}>
                           <Button
                             type="primary"
                             htmlType="submit"
                             className="login-form-button"
-                            onClick={id => onEditBodyMap(field.name)}
+                            onClick={() => setListId(field.name)}
                           >
                             Update
                           </Button>
