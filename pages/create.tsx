@@ -48,7 +48,6 @@ function Report() {
       bodymaps: values.BodyMaps,
       email: email,
     }
-    console.log("Received values of form: ", data)
     await createReport({
       variables: data,
     })

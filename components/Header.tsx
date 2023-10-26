@@ -17,34 +17,52 @@ const Header = () => {
   return (
     <nav>
       <Flex justify="space-between" align="center">
-      <div>
-        <Link href="/" legacyBehavior>
-          <a className="bold" data-active={isActive("/")}>
-            Injury Tracking System
-          </a>
-        </Link>
-      </div>
-      <Space size="small">
-        <Link href="/reports" legacyBehavior>
-          <a data-active={isActive("/reports")} className="nav-link">Report</a>
-        </Link>
-        {session && <Link href="/create" legacyBehavior>
-          <a data-active={isActive("/create")} className="nav-link">Create</a>
-        </Link>}
-        {session ? (
-          <Space>
-            {image && <Avatar src={image} />}
-            <Button type="default" size="large" icon={<LogoutOutlined />} danger onClick={() => signOut()}>
-              Sign out
-            </Button>
-          </Space>
-        ) : (
-          <Link href="/api/auth/signin" legacyBehavior>
-            <a data-active={isActive("/api/auth/signin")} className="nav-link">Sign in</a>
+        <div>
+          <Link href="/" legacyBehavior>
+            <a className="bold" data-active={isActive("/")}>
+              Injury Tracker
+            </a>
           </Link>
-        )}
-      </Space>
-
+        </div>
+        <Space size="small">
+          <Link href="/reports" legacyBehavior>
+            <a data-active={isActive("/reports")} className="nav-link">
+              Report
+            </a>
+          </Link>
+          {session && (
+            <Link href="/create" legacyBehavior>
+              <a data-active={isActive("/create")} className="nav-link">
+                Create
+              </a>
+            </Link>
+          )}
+          {session ? (
+            <Space>
+              <Link href="/profile">
+                {image && <Avatar src={image} />}
+              </Link>
+              <Button
+                type="default"
+                size="large"
+                icon={<LogoutOutlined />}
+                danger
+                onClick={() => signOut()}
+              >
+                Sign out
+              </Button>
+            </Space>
+          ) : (
+            <Link href="/api/auth/signin" legacyBehavior>
+              <a
+                data-active={isActive("/api/auth/signin")}
+                className="nav-link"
+              >
+                Sign in
+              </a>
+            </Link>
+          )}
+        </Space>
       </Flex>
       <style jsx>{`
         nav {

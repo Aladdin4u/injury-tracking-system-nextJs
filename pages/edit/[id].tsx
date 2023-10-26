@@ -11,7 +11,6 @@ import { useState } from "react"
 import { CloseOutlined, UserOutlined, DeleteOutlined } from "@ant-design/icons"
 import dayjs from "dayjs"
 import { Button, Card, Form, Input, DatePicker, Row, Col, Space } from "antd"
-import Link from "next/link"
 import Chart from "../../components/Chart"
 
 const EditReportMutation = gql`
@@ -89,7 +88,6 @@ const Edit: React.FC<{
       name: values.name,
       date: values["date"].format("YYYY-MM-DD HH:mm:ss"),
     }
-    console.log("Received values of form: ", data)
     await editReport({
       variables: data,
     })
@@ -97,7 +95,6 @@ const Edit: React.FC<{
 
   const onEditBodyMap = async (values: any) => {
     let data = values.BodyMaps[ListId]
-    console.log("Received values of form: ", data)
     await editBodyMap({
       variables: data,
     })
@@ -109,7 +106,6 @@ const Edit: React.FC<{
     let data = {
       id: b[values].id,
     }
-    console.log("Received values of form: ", data, values, bodyMaps)
     await deleteBodyMap({
       variables: data,
     })
@@ -120,7 +116,6 @@ const Edit: React.FC<{
       label: values.BodyMaps[0].label,
       details: values.BodyMaps[0].details,
     }
-    console.log("Received values of form: ", data)
     await createBodyMap({
       variables: data,
     })
@@ -434,7 +429,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
   return {
     props: {
       data,
-      session,
     },
   }
 }
