@@ -43,8 +43,9 @@ input BodyMapInput {
 
 type Query {
   users: [User]
+  findUser(email: string): [User]
   drafts: [Report]
-  feed: [Report]
+  feed(id: String!): [Report]
   filterReports(searchName: String, searchDate: String): [Report]
   report(reportId: String!): Report
 }

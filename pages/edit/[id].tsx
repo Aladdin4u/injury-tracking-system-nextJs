@@ -273,6 +273,7 @@ const Edit: React.FC<{
       </div>
       <div>
         <h1>Create BodyMaps</h1>
+        <p>Click on the bodymap image below to list injury</p>
         <Form
           name="create-bodyMap"
           className="login-form"

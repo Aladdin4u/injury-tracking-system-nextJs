@@ -63,20 +63,41 @@ builder.prismaObject("BodyMap", {
 builder.queryField("feed", t =>
   t.prismaField({
     type: ["Report"],
-    resolve: async (query, _parent, _args, _info) =>
+    resolve: async (_query, _parent, args, _info) =>
+      prisma.report.findMany({}),
+  })
+)
+
+builder.queryField("profile", t =>
+  t.prismaField({
+    type: ["Report"],
+    args: {
+      id: t.arg.string({ required: true }),
+    },
+    resolve: async (query, _parent, args, _info) =>
       prisma.report.findMany({
         ...query,
-        // where: { userId: User.id }
+        where: { userId: args.id },
       }),
   })
 )
+
 builder.queryField("users", t =>
   t.prismaField({
     type: ["User"],
-    resolve: async (query, _parent, _args, _info) =>
-      prisma.user.findMany({
-        ...query,
-        // where: { userId: User.id }
+    resolve: async (_query, _parent, _args, _info) => prisma.user.findMany({}),
+  })
+)
+
+builder.queryField("findUser", t =>
+  t.prismaField({
+    type: "User",
+    args: {
+      email: t.arg.string({ required: true }),
+    },
+    resolve: async (_query, _parent, args, _info) =>
+      prisma.user.findUnique({
+        where: { email: args.email },
       }),
   })
 )

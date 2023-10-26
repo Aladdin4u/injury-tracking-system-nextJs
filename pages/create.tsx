@@ -36,7 +36,6 @@ const CreateReportMutation = gql`
 `
 
 function Report() {
-  // console.log(session)
   const { data: session } = useSession()
   const [email, setEmail] = useState(session?.user?.email)
   const [createReport] = useMutation(CreateReportMutation)
@@ -86,6 +85,7 @@ function Report() {
         >
           <DatePicker format="YYYY-MM-DD HH:mm:ss" />
         </Form.Item>
+        <p>Click on the bodymap image below to list injury</p>
         <Form.List name="BodyMaps">
           {(fields, { add, remove }) => (
             <div
@@ -218,7 +218,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
 
   return {
     props: {
-      session,
     },
   }
 }

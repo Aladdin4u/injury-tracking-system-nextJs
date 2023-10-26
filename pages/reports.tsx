@@ -1,8 +1,11 @@
 import Layout from "../components/Layout"
-import gql from "graphql-tag"
-import client from "../lib/apollo-client"
 import Report, { ReportProps } from "../components/Report"
+import { authOptions } from "./api/auth/[...nextauth]"
+import type { GetServerSideProps } from "next"
+import { getServerSession } from "next-auth/next"
+import client from "../lib/apollo-client"
 import { useQuery } from "@apollo/client"
+import gql from "graphql-tag"
 import { useState } from "react"
 import { Button, Card, Form, Input, Row, DatePicker } from "antd"
 
@@ -54,39 +57,36 @@ const Reports: React.FC<{ data: { feed: ReportProps[] } }> = props => {
         <main>
           <h1>Reports</h1>
           <Card>
-          <Form form={form} name="advanced_search" onFinish={onFinish}>
-            <Row gutter={24} justify="space-between">
-              <Form.Item
-                label="Search"
-                name="search"
-              >
-                <Input placeholder="Search report name" />
-              </Form.Item>
-              <Form.Item
-                name="date"
-                label="Date Time"
-              >
-                <DatePicker format="YYYY-MM-DD HH:mm:ss" />
-              </Form.Item>
-              <Button type="primary" htmlType="submit">
-                Search
-              </Button>
-            </Row>
-          </Form>
+            <Form form={form} name="advanced_search" onFinish={onFinish}>
+              <Row gutter={24} justify="space-between">
+                <Form.Item label="Search" name="search">
+                  <Input placeholder="Search report name" />
+                </Form.Item>
+                <Form.Item name="date" label="Date Time">
+                  <DatePicker format="YYYY-MM-DD HH:mm:ss" />
+                </Form.Item>
+                <Button type="primary" htmlType="submit">
+                  Search
+                </Button>
+              </Row>
+            </Form>
           </Card>
-          {results.data && results.data.filterReports > 0 ?
+          {results.data && results.data.filterReports > 0 ? (
             results.data.filterReports.map((post: any) => (
               <div key={post.id} className="post">
                 <Report post={post} />
               </div>
-            )) : (<p>no results found</p>)
-          }
+            ))
+          ) : (
+            <p>no results found</p>
+          )}
 
-          {!results.data && props.data.feed.map(post => (
-            <div key={post.id} className="post">
-              <Report post={post} />
-            </div>
-          ))}
+          {!results.data &&
+            props.data.feed.map(post => (
+              <div key={post.id} className="post">
+                <Report post={post} />
+              </div>
+            ))}
         </main>
       </div>
       <style jsx>{`
@@ -107,7 +107,30 @@ const Reports: React.FC<{ data: { feed: ReportProps[] } }> = props => {
   )
 }
 
-export async function getServerSideProps() {
+export const getServerSideProps: GetServerSideProps = async context => {
+  const session = await getServerSession(context.req, context.res, authOptions)
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/api/auth/signin",
+        permanent: false,
+      },
+    }
+  }
+
+  const email = session?.user?.email
+  // const findUser = await client.query({
+  //   query: gql`
+  //     query UserId {
+  //       findUser {
+  //        id
+  //        name
+  //     }
+  //   `,
+  //   variables: { email },
+  // })
+
+  // console.log(findUser)
   const { data } = await client.query({
     query: gql`
       query FeedQuery {
