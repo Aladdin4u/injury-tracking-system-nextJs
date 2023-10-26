@@ -10,7 +10,7 @@ import { getServerSession } from "next-auth/next"
 import { useState } from "react"
 import { CloseOutlined, UserOutlined, DeleteOutlined } from "@ant-design/icons"
 import dayjs from "dayjs"
-import { Button, Card, Form, Input, DatePicker, Row, Col } from "antd"
+import { Button, Card, Form, Input, DatePicker, Row, Col, Space } from "antd"
 import Link from "next/link"
 import Chart from "../../components/Chart"
 
@@ -101,7 +101,7 @@ const Edit: React.FC<{
     await editBodyMap({
       variables: data,
     })
-    Router.push("/")
+    Router.reload()
   }
 
   const onDeleteBodyMap = async (values: any) => {
@@ -109,7 +109,7 @@ const Edit: React.FC<{
     let data = {
       id: b[values].id,
     }
-    console.log("Received values of form: ", data, values)
+    console.log("Received values of form: ", data, values, bodyMaps)
     await deleteBodyMap({
       variables: data,
     })
@@ -120,10 +120,11 @@ const Edit: React.FC<{
       label: values.BodyMaps[0].label,
       details: values.BodyMaps[0].details,
     }
-    console.log("Received values of form: ", data, bodys)
+    console.log("Received values of form: ", data)
     await createBodyMap({
       variables: data,
     })
+    Router.reload()
   }
 
   const toolChart = (tooltipItems: any) => {
@@ -185,7 +186,7 @@ const Edit: React.FC<{
           onFinish={onEditBodyMap}
         >
           <Form.List name="BodyMaps">
-            {fields => (
+            {(fields, { add, remove }) => (
               <div
                 style={{
                   display: "flex",
@@ -193,7 +194,7 @@ const Edit: React.FC<{
                   flexDirection: "column",
                 }}
               >
-                {fields.map((field, key, value) => (
+                {fields.map(field => (
                   <Card
                     size="small"
                     title={`List Injury ${field.name + 1}`}
@@ -206,7 +207,9 @@ const Edit: React.FC<{
                         md: 24,
                         lg: 32,
                       }}
-                      justify="space-between"
+                      justify="space-around"
+                      align="middle"
+                      wrap
                     >
                       <Col className="gutter-row" span={6}>
                         <Form.Item
@@ -236,29 +239,30 @@ const Edit: React.FC<{
                           <Input placeholder="Describe the Injury" />
                         </Form.Item>
                       </Col>
-                      <Col className="gutter-row" span={2}>
-                        <Form.Item name={[field.name, "id"]}>
-                          <Button
-                            type="primary"
-                            htmlType="submit"
-                            className="login-form-button"
-                            onClick={() => setListId(field.name)}
-                          >
-                            Update
-                          </Button>
-                        </Form.Item>
-                      </Col>
-                      <Col className="gutter-row" span={2}>
-                        <Form.Item name={[field.name, "id"]}>
-                          <Button
-                            size="small"
-                            type="default"
-                            onClick={id => onDeleteBodyMap(field.name)}
-                            icon={<DeleteOutlined />}
-                            danger
-                          ></Button>
-                        </Form.Item>
-                      </Col>
+                        <Space size="small" wrap>
+                          <Form.Item name={[field.name, "id"]}>
+                            <Button
+                              type="primary"
+                              htmlType="submit"
+                              className="login-form-button"
+                              onClick={() => setListId(field.name)}
+                            >
+                              Update
+                            </Button>
+                          </Form.Item>
+                          <Form.Item name={[field.name, "id"]}>
+                            <Button
+                              size="small"
+                              type="default"
+                              onClick={id => {
+                                onDeleteBodyMap(field.name)
+                                remove(field.name)
+                              }}
+                              icon={<DeleteOutlined />}
+                              danger
+                            ></Button>
+                          </Form.Item>
+                        </Space>
                     </Row>
                   </Card>
                 ))}
@@ -369,20 +373,20 @@ const Edit: React.FC<{
                     >
                       <Input placeholder="Describe the Injury" />
                     </Form.Item>
+                    <Form.Item style={{ marginTop: 12 }}>
+                      <Button
+                        type="primary"
+                        htmlType="submit"
+                        className="login-form-button"
+                      >
+                        Create injury
+                      </Button>
+                    </Form.Item>
                   </Card>
                 ))}
               </div>
             )}
           </Form.List>
-          <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              className="login-form-button"
-            >
-              Create injury
-            </Button>
-          </Form.Item>
         </Form>
       </div>
     </Layout>

@@ -32,7 +32,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "pages/reports.tsx"  ],
   "ts-node": {
     "compilerOptions": {
       "module": "commonjs"

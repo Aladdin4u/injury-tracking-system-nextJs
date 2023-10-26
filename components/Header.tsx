@@ -1,8 +1,14 @@
 import Link from "next/link"
+import { useState } from "react"
 import { useRouter } from "next/router"
+import { useSession, signIn, signOut } from "next-auth/react"
+import { Avatar, Space, Button, Flex } from "antd"
+import { LogoutOutlined } from "@ant-design/icons"
 
 const Header = () => {
+  const { data: session } = useSession()
   const router = useRouter()
+  const [image, setImage] = useState(session?.user?.image)
 
   function isActive(pathname: string) {
     return router.pathname === pathname
@@ -10,33 +16,45 @@ const Header = () => {
 
   return (
     <nav>
-      <div className="left">
+      <Flex justify="space-between" align="center">
+      <div>
         <Link href="/" legacyBehavior>
           <a className="bold" data-active={isActive("/")}>
-            Blog
+            Injury Tracking System
           </a>
         </Link>
-        <Link href="/drafts" legacyBehavior>
-          <a data-active={isActive("/drafts")}>Drafts</a>
-        </Link>
       </div>
-      <div className="right">
-        <Link href="/signup" legacyBehavior>
-          <a data-active={isActive("/signup")}>Signup</a>
+      <Space size="small">
+        <Link href="/reports" legacyBehavior>
+          <a data-active={isActive("/reports")} className="nav-link">Report</a>
         </Link>
-        <Link href="/create" legacyBehavior>
-          <a data-active={isActive("/create")}>+ Create draft</a>
-        </Link>
-      </div>
+        {session && <Link href="/create" legacyBehavior>
+          <a data-active={isActive("/create")} className="nav-link">Create</a>
+        </Link>}
+        {session ? (
+          <Space>
+            {image && <Avatar src={image} />}
+            <Button type="default" size="large" icon={<LogoutOutlined />} danger onClick={() => signOut()}>
+              Sign out
+            </Button>
+          </Space>
+        ) : (
+          <Link href="/api/auth/signin" legacyBehavior>
+            <a data-active={isActive("/api/auth/signin")} className="nav-link">Sign in</a>
+          </Link>
+        )}
+      </Space>
+
+      </Flex>
       <style jsx>{`
         nav {
-          display: flex;
+          // background: purple;
           padding: 2rem;
-          align-items: center;
         }
 
         .bold {
           font-weight: bold;
+          font-size: 1rem;
         }
 
         a {
@@ -53,18 +71,18 @@ const Header = () => {
           margin-left: 1rem;
         }
 
-        .right {
-          margin-left: auto;
-        }
-
-        .right a {
+        .nav-link {
           border: 1px solid black;
           padding: 0.5rem 1rem;
           border-radius: 3px;
         }
+        .nav-link:hover {
+          color: white;
+          background: gray;
+        }
       `}</style>
     </nav>
-  );
+  )
 }
 
 export default Header

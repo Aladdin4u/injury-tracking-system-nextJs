@@ -42,10 +42,6 @@ function Report() {
   const [createReport] = useMutation(CreateReportMutation)
   const [label, setLabel] = useState("")
 
-  const handleLabel = (e: any) => {
-    setLabel(e.target.value)
-  }
-
   const onFinish = async (values: any) => {
     let data = {
       name: values.name,
@@ -69,13 +65,6 @@ function Report() {
       <Form
         name="create-report"
         className="login-form"
-        // initialValues={{
-        //   BodyMaps: [
-        //     {
-        //       label: label,
-        //     },
-        //   ],
-        // }}
         onFinish={onFinish}
       >
         <Form.Item
@@ -221,7 +210,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
   if (!session) {
     return {
       redirect: {
-        destination: "/",
+        destination: "/api/auth/signin",
         permanent: false,
       },
     }

@@ -45,7 +45,7 @@ type Query {
   users: [User]
   drafts: [Report]
   feed: [Report]
-  filterReports(searchString: String): [Report]
+  filterReports(searchName: String, searchDate: String): [Report]
   report(reportId: String!): Report
 }
 

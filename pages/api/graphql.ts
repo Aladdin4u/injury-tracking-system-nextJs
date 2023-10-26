@@ -102,17 +102,19 @@ builder.queryField("filterReports", t =>
   t.prismaField({
     type: ["Report"],
     args: {
-      searchString: t.arg.string({ required: false }),
+      searchName: t.arg.string({ required: false }),
+      searchDate: t.arg.string({ required: false }),
     },
     resolve: async (query, _parent, args, _info) => {
-      const or = args.searchString
-        ? {
-            OR: [
-              { name: { contains: args.searchString } },
-              { date: { contains: args.searchString } },
-            ],
-          }
-        : {}
+      const or =
+        args.searchName || args.searchDate
+          ? {
+              OR: [
+                { name: { contains: args.searchName } },
+                { date: { contains: args.searchDate } },
+              ],
+            }
+          : {}
       return prisma.report.findMany({
         ...query,
         where: { ...or },

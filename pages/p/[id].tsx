@@ -4,9 +4,12 @@ import gql from "graphql-tag"
 import { useMutation } from "@apollo/client"
 import client from "../../lib/apollo-client"
 import { ReportProps } from "../../components/Report"
-import { GetServerSideProps } from "next";
-import { authOptions } from '../api/auth/[...nextauth]';
-import { getServerSession } from "next-auth/next";
+import { GetServerSideProps } from "next"
+import { authOptions } from "../api/auth/[...nextauth]"
+import { getServerSession } from "next-auth/next"
+import { List, Button, Space, Card, Typography } from 'antd';
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons"
+import { useState } from "react"
 
 const DeleteMutation = gql`
   mutation DeleteMutation($id: ID!) {
@@ -23,83 +26,85 @@ const DeleteMutation = gql`
 `
 
 type BodyMap = {
-  id: number;
-  label: string;
-  details: string;
+  id: number
+  label: string
+  details: string
 }
 
-const Report: React.FC<{ data: { report: ReportProps } }> = (props) => {
+const Report: React.FC<{ data: { report: ReportProps } }> = props => {
   const id = useRouter().query.id
+  const data = props.data.report.bodymaps
   const [deleteReport] = useMutation(DeleteMutation)
+  const [bodyMaps, setBodyMaps] = useState<BodyMap[]>(data)
 
   let name = props.data.report.name
-  const bodyMaps:BodyMap[] = props.data.report.bodymaps
+  // const bodyMaps: BodyMap[] = props.data.report.bodymaps
 
-  const authorName = props.data.report.user ? props.data.report.user.name : "Unknown user"
+  const authorName = props.data.report.user
+    ? props.data.report.user.name
+    : "Unknown user"
   return (
     <Layout>
-      <div>
+      <Card>
         <h2>{name}</h2>
-        <p>By {authorName}</p>
-        <p>{props.data.report.date}</p>
-        {bodyMaps.map((b) => 
-          (<div key={b.id}>
-            <h3>{b.id}</h3>
-            <h3>{b.label}</h3>
-            <p>{b.details}</p>
-          </div>)
+        <Typography>By {authorName}</Typography>
+        <Typography>{props.data.report.date}</Typography>
+        <List
+          itemLayout="horizontal"
+          dataSource={bodyMaps}
+          renderItem={(item, index) => (
+            <List.Item>
+              <List.Item.Meta
+                title={<a href="https://ant.design">{item.label}</a>}
+                description={item.details}
+              />
+            </List.Item>
           )}
-        
-        <button onClick={() => Router.push("/edit/[id]", `/edit/${id}`)}>Edit</button>
-        <button
-          onClick={async e => {
-            await deleteReport({
-              variables: {
-                id,
-              },
-            })
-            Router.push("/")
-          }}
-        >
-          Delete
-        </button>
-      </div>
-      <style jsx>{`
-        .page {
-          background: white;
-          padding: 2rem;
-        }
-
-        .actions {
-          margin-top: 2rem;
-        }
-
-        button {
-          background: #ececec;
-          border: 0;
-          border-radius: 0.125rem;
-          padding: 1rem 2rem;
-        }
-
-        button + button {
-          margin-left: 1rem;
-        }
-      `}</style>
+        />
+        <Space size="small">
+          <Button
+            type="primary"
+            icon={<EditOutlined />}
+            onClick={() => Router.push("/edit/[id]", `/edit/${id}`)}
+          >
+            Edit
+          </Button>
+          <Button
+            type="primary"
+            icon={<DeleteOutlined />}
+            danger
+            onClick={async e => {
+              await deleteReport({
+                variables: {
+                  id,
+                },
+              })
+              Router.push("/")
+            }}
+          >
+            Delete
+          </Button>
+        </Space>
+      </Card>
     </Layout>
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async context => {
   const session = await getServerSession(context.req, context.res, authOptions)
   if (!session) {
     return {
       redirect: {
-        destination: '/',
+        destination: "/",
         permanent: false,
       },
     }
   }
-  const id = Number(Array.isArray(context.params?.id) ? context.params?.id[0] : context.params?.id)
+  const id = Number(
+    Array.isArray(context.params?.id)
+      ? context.params?.id[0]
+      : context.params?.id
+  )
   const { data } = await client.query({
     query: gql`
       query ReportQuery($id: ID!) {
@@ -120,14 +125,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       }
     `,
     variables: { id },
-  });
+  })
 
   return {
     props: {
       data,
-      session
+      session,
     },
-  };
+  }
 }
 
 export default Report

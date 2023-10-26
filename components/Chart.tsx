@@ -19,7 +19,6 @@ interface Window {
 }
 var image: any
 if (typeof window !== "undefined") {
-  // browser code
   image = new window.Image()
   image.src =
     "https://github.com/Aladdin4u/injury-tracking-system-nextJs/assets/101972392/1d20cce2-7c58-4841-85df-107e80295f8e"
@@ -228,8 +227,8 @@ export const data = {
   ],
 }
 
-const Chart:React.FC<ChartData> = ({ options }) => {
-  
+const Chart: React.FC<ChartData> = ({ options }) => {
   return <Scatter options={options} data={data} plugins={[plugin]} />
 }
+
 export default Chart
