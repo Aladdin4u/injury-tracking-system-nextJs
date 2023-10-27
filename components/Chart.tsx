@@ -7,7 +7,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js"
-import { Scatter, ChartData } from "react-chartjs-2"
+import { Scatter } from "react-chartjs-2"
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend)
 
@@ -227,8 +227,9 @@ export const data = {
   ],
 }
 
-const Chart: React.FC<ChartData> = ({ options }) => {
-  return <Scatter options={options} data={data} plugins={[plugin]} />
+
+const Chart = (props:any) => {
+  return <Scatter options={props.options} data={data} plugins={[plugin]} />
 }
 
 export default Chart

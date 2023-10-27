@@ -1,6 +1,5 @@
 import React, { useState } from "react"
 import type { GetServerSideProps } from "next"
-import { useSession } from "next-auth/react"
 import Layout from "../components/Layout"
 import Router from "next/router"
 import gql from "graphql-tag"
@@ -14,8 +13,6 @@ import {
   Form,
   Input,
   DatePicker,
-  Space,
-  Flex,
   Typography,
   Alert,
 } from "antd"
@@ -214,8 +211,6 @@ const Create: React.FC<{ data: string }> = props => {
               </div>
             )}
           </Form.List>
-          <Flex vertical align="center" >
-          </Flex>
             <Form.Item>
               <Button
                 type="primary"

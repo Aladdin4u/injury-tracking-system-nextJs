@@ -18,7 +18,7 @@ This aplication shows how to implement a **fullstack app in TypeScript with :
 1. cd into cloned repo
 1. Set up environment variables
    ```
-   cp .env.local.example .env.local
+   cp .env.example .env
    ```
 1. Enter your data into .env.local
 1. run `yarn intall`
