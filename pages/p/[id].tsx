@@ -79,7 +79,7 @@ const Report: React.FC<{ data: { report: ReportProps } }> = props => {
                   id,
                 },
               })
-              Router.push("/")
+              Router.push("/profile")
             }}
           >
             Delete

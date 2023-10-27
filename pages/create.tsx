@@ -8,7 +8,17 @@ import { useMutation } from "@apollo/client"
 import { authOptions } from "./api/auth/[...nextauth]"
 import { getServerSession } from "next-auth/next"
 import { CloseOutlined, UserOutlined } from "@ant-design/icons"
-import { Button, Card, Form, Input, DatePicker, Space } from "antd"
+import {
+  Button,
+  Card,
+  Form,
+  Input,
+  DatePicker,
+  Space,
+  Flex,
+  Typography,
+  Alert,
+} from "antd"
 import Link from "next/link"
 import Chart from "../components/Chart"
 
@@ -35,13 +45,21 @@ const CreateReportMutation = gql`
   }
 `
 
-function Report() {
-  const { data: session } = useSession()
-  const [email, setEmail] = useState(session?.user?.email)
+const Create: React.FC<{ data: string }> = props => {
+  const [email, setEmail] = useState(props?.data)
   const [createReport] = useMutation(CreateReportMutation)
   const [label, setLabel] = useState("")
+  const [visible, setVisible] = useState(false)
 
   const onFinish = async (values: any) => {
+    setVisible(false)
+    console.log(values.BodyMaps)
+
+    if (values.BodyMaps == null || values.BodyMaps.length < 1) {
+      console.log("invalid")
+      setVisible(true)
+      return
+    }
     let data = {
       name: values.name,
       date: values["date"].format("YYYY-MM-DD HH:mm:ss"),
@@ -51,8 +69,12 @@ function Report() {
     await createReport({
       variables: data,
     })
-    Router.push("/")
+    Router.push("/profile")
   }
+
+  const handleClose = () => {
+    setVisible(false);
+  };
 
   const toolChart = (tooltipItems: any) => {
     return tooltipItems.label
@@ -60,16 +82,22 @@ function Report() {
 
   return (
     <Layout>
-      <Form
-        name="create-report"
-        className="login-form"
-        onFinish={onFinish}
-      >
+      {visible && (
+        <Alert
+          message="Please select injury type from body map picture below"
+          type="error"
+          closable
+          afterClose={handleClose}
+          showIcon
+          style={{marginBottom: 8}}
+        />
+      )}
+      <Form name="create-report" className="login-form" onFinish={onFinish}>
         <Form.Item
           name="name"
           label="Reporter Name"
           rules={[
-            { required: true, message: "Please input your Reporter Name!" },
+            { required: true, message: "Please enter your Reporter Name!" },
           ]}
         >
           <Input
@@ -80,7 +108,7 @@ function Report() {
         <Form.Item
           name="date"
           label="Date Time"
-          rules={[{ required: true, message: "Please input your Date!" }]}
+          rules={[{ required: true, message: "Please enter your Date!" }]}
         >
           <DatePicker format="YYYY-MM-DD HH:mm:ss" />
         </Form.Item>
@@ -162,7 +190,7 @@ function Report() {
                     rules={[
                       {
                         required: true,
-                        message: "Please input Injury Label!",
+                        message: "Please enter Injury Label!",
                       },
                     ]}
                   >
@@ -174,7 +202,7 @@ function Report() {
                     rules={[
                       {
                         required: true,
-                        message: "Please input Injury description!",
+                        message: "Please enter Injury description!",
                       },
                     ]}
                   >
@@ -185,24 +213,25 @@ function Report() {
             </div>
           )}
         </Form.List>
-        <Space direction="vertical">
+        <Flex vertical align="center">
           <Form.Item>
             <Button
               type="primary"
               htmlType="submit"
               className="login-form-button"
+              style={{ marginTop: 8 }}
             >
               Create
             </Button>
-            Or <Link href="/">Cancel</Link>
           </Form.Item>
-        </Space>
+          <Typography>
+            Or <Link href="/profile">Cancel</Link>
+          </Typography>
+        </Flex>
       </Form>
     </Layout>
   )
 }
-
-export default Report
 
 export const getServerSideProps: GetServerSideProps = async context => {
   const session = await getServerSession(context.req, context.res, authOptions)
@@ -215,8 +244,13 @@ export const getServerSideProps: GetServerSideProps = async context => {
     }
   }
 
+  const data = session?.user?.email
+
   return {
     props: {
+      data,
     },
   }
 }
+
+export default Create
