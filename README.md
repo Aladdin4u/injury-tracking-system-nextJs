@@ -1,8 +1,8 @@
-# Fullstack Example with Next.js (GraphQL API)
+# Injury Tracker
 
-This example shows how to implement a **Fullstack NextJs app with GraphQL** with the following stack:
+A web application to record and track the injuries reported by a person
 
-This example shows how to implement a **fullstack app in TypeScript with :
+This aplication shows how to implement a **fullstack app in TypeScript with :
 - [**Next.js**](https://nextjs.org/)**: A [React](https://reactjs.org/) framework
 - [**Apollo Client**](https://www.apollographql.com/docs/react/) (frontend), 
 - [**GraphQL Yoga**](https://the-guild.dev/graphql/yoga-server): GraphQL server
@@ -10,3 +10,19 @@ This example shows how to implement a **fullstack app in TypeScript with :
 - [**Prisma Client**](https://www.prisma.io/docs/concepts/components/prisma-client): Databases access (ORM)
 - [**Prisma Migrate**](https://www.prisma.io/docs/concepts/components/prisma-migrate): Database migrations
 - [**SQLite**](https://www.sqlite.org/index.html): Local, file-based SQL database
+- [**Ant Design**](https://ant.design): Ant Design is an enterprise-class UI design language and React UI library
+
+## Installation:
+
+1. Clone repo
+1. cd into cloned repo
+1. Set up environment variables
+   ```
+   cp .env.local.example .env.local
+   ```
+1. Enter your data into .env.local
+1. run `yarn intall`
+
+## Usage:
+
+1. run `npm run dev`
