@@ -229,12 +229,10 @@ const Reports: React.FC<{ data: { feed: ReportProps[] } }> = props => {
 
   return (
     <Layout>
-      <div className="page">
-        <main>
+        <main style={{padding: "0 2rem"}}>
           <h1>Reports</h1>
           <Table columns={columns} dataSource={data} />
         </main>
-      </div>
       <style jsx>{`
         .post {
           background: white;

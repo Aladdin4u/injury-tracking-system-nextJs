@@ -73,8 +73,8 @@ const Create: React.FC<{ data: string }> = props => {
   }
 
   const handleClose = () => {
-    setVisible(false);
-  };
+    setVisible(false)
+  }
 
   const toolChart = (tooltipItems: any) => {
     return tooltipItems.label
@@ -82,153 +82,156 @@ const Create: React.FC<{ data: string }> = props => {
 
   return (
     <Layout>
-      {visible && (
-        <Alert
-          message="Please select injury type from body map picture below"
-          type="error"
-          closable
-          afterClose={handleClose}
-          showIcon
-          style={{marginBottom: 8}}
-        />
-      )}
-      <Form name="create-report" className="login-form" onFinish={onFinish}>
-        <Form.Item
-          name="name"
-          label="Reporter Name"
-          rules={[
-            { required: true, message: "Please enter your Reporter Name!" },
-          ]}
-        >
-          <Input
-            prefix={<UserOutlined className="site-form-item-icon" />}
-            placeholder="Reporter Name"
+      <main style={{ padding: "0 2rem" }}>
+        {visible && (
+          <Alert
+            message="Please select injury type from body map picture below"
+            type="error"
+            closable
+            afterClose={handleClose}
+            showIcon
+            style={{ marginBottom: 8 }}
           />
-        </Form.Item>
-        <Form.Item
-          name="date"
-          label="Date Time"
-          rules={[{ required: true, message: "Please enter your Date!" }]}
-        >
-          <DatePicker format="YYYY-MM-DD HH:mm:ss" />
-        </Form.Item>
-        <p>Click on the bodymap image below to list injury</p>
-        <Form.List name="BodyMaps">
-          {(fields, { add, remove }) => (
-            <div
-              style={{
-                display: "flex",
-                rowGap: 16,
-                flexDirection: "column",
-              }}
-            >
-              <Chart
-                options={{
-                  onClick: (event: any) => {
-                    add()
-                    setLabel(event.chart.tooltip.dataPoints[0].label)
-                  },
-                  scales: {
-                    x: {
-                      min: 0,
-                      max: 100,
-                      grid: {
-                        display: false,
-                      },
-                      ticks: {
-                        display: false,
-                      },
+        )}
+        <Form name="create-report" className="login-form" onFinish={onFinish}>
+          <Form.Item
+            name="name"
+            label="Reporter Name"
+            rules={[
+              { required: true, message: "Please enter your Reporter Name!" },
+            ]}
+          >
+            <Input
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              placeholder="Reporter Name"
+            />
+          </Form.Item>
+          <Form.Item
+            name="date"
+            label="Date Time"
+            rules={[{ required: true, message: "Please enter your Date!" }]}
+          >
+            <DatePicker format="YYYY-MM-DD HH:mm:ss" style={{display: "block"}} />
+          </Form.Item>
+          <p>Click on the bodymap image below to list injury</p>
+          <Form.List name="BodyMaps">
+            {(fields, { add, remove }) => (
+              <div
+                style={{
+                  display: "flex",
+                  rowGap: 16,
+                  flexDirection: "column",
+                }}
+              >
+                <Chart
+                  options={{
+                    onClick: (event: any) => {
+                      add()
+                      setLabel(event.chart.tooltip.dataPoints[0].label)
                     },
-                    y: {
-                      min: 0,
-                      max: 100,
-                      grid: {
-                        display: false,
+                    scales: {
+                      x: {
+                        min: 0,
+                        max: 100,
+                        grid: {
+                          display: false,
+                        },
+                        ticks: {
+                          display: false,
+                        },
                       },
-                      ticks: {
-                        display: false,
-                      },
-                    },
-                  },
-                  elements: {
-                    point: {
-                      pointStyle: "circle",
-                    },
-                  },
-                  plugins: {
-                    tooltip: {
-                      yAlign: "bottom",
-                      displayColors: false,
-                      callbacks: {
-                        events: ["click"],
-                        label: toolChart,
-                        title: () => {
-                          return ""
+                      y: {
+                        min: 0,
+                        max: 100,
+                        grid: {
+                          display: false,
+                        },
+                        ticks: {
+                          display: false,
                         },
                       },
                     },
-                  },
-                }}
-              />
-              {fields.map(field => (
-                <Card
-                  size="small"
-                  title={`List Injury ${field.name + 1}`}
-                  key={field.key}
-                  extra={
-                    <CloseOutlined
-                      onClick={() => {
-                        remove(field.name)
-                      }}
-                    />
-                  }
-                >
-                  <Form.Item
-                    label="label"
-                    name={[field.name, "label"]}
-                    initialValue={label}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter Injury Label!",
+                    elements: {
+                      point: {
+                        pointStyle: "circle",
                       },
-                    ]}
-                  >
-                    <Input placeholder="Label" disabled />
-                  </Form.Item>
-                  <Form.Item
-                    label="Description"
-                    name={[field.name, "details"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter Injury description!",
+                    },
+                    plugins: {
+                      tooltip: {
+                        yAlign: "bottom",
+                        displayColors: false,
+                        callbacks: {
+                          events: ["click"],
+                          label: toolChart,
+                          title: () => {
+                            return ""
+                          },
+                        },
                       },
-                    ]}
+                    },
+                  }}
+                />
+                {fields.map(field => (
+                  <Card
+                    size="small"
+                    title={`List Injury ${field.name + 1}`}
+                    key={field.key}
+                    extra={
+                      <CloseOutlined
+                        onClick={() => {
+                          remove(field.name)
+                        }}
+                      />
+                    }
                   >
-                    <Input placeholder="Describe the Injury" />
-                  </Form.Item>
-                </Card>
-              ))}
-            </div>
-          )}
-        </Form.List>
-        <Flex vertical align="center">
-          <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              className="login-form-button"
-              style={{ marginTop: 8 }}
-            >
-              Create
-            </Button>
-          </Form.Item>
-          <Typography>
-            Or <Link href="/profile">Cancel</Link>
-          </Typography>
-        </Flex>
-      </Form>
+                    <Form.Item
+                      label="label"
+                      name={[field.name, "label"]}
+                      initialValue={label}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter Injury Label!",
+                        },
+                      ]}
+                    >
+                      <Input placeholder="Label" disabled />
+                    </Form.Item>
+                    <Form.Item
+                      label="Description"
+                      name={[field.name, "details"]}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter Injury description!",
+                        },
+                      ]}
+                    >
+                      <Input placeholder="Describe the Injury" />
+                    </Form.Item>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </Form.List>
+          <Flex vertical align="center" >
+          </Flex>
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="login-form-button"
+                block
+                style={{ marginTop: 8 }}
+              >
+                Create
+              </Button>
+            </Form.Item>
+            <Typography style={{ marginTop: 8, width: "100%", textAlign: "center" }}>
+              Or <Link href="/profile">Cancel</Link>
+            </Typography>
+        </Form>
+      </main>
     </Layout>
   )
 }

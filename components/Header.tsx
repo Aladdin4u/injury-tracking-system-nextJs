@@ -43,7 +43,7 @@ const Header = () => {
                 {image && <Avatar src={image} />}
               </Link>
               <Button
-                type="default"
+                type="link"
                 size="large"
                 icon={<LogoutOutlined />}
                 danger
@@ -66,8 +66,9 @@ const Header = () => {
       </Flex>
       <style jsx>{`
         nav {
-          // background: purple;
+          background: #16151F;
           padding: 2rem;
+          margin-bottom: 2rem;
         }
 
         .bold {
@@ -77,26 +78,17 @@ const Header = () => {
 
         a {
           text-decoration: none;
-          color: #000;
+          color: #696CC4;
           display: inline-block;
         }
 
-        .left a[data-active="true"] {
-          color: gray;
-        }
-
-        a + a {
-          margin-left: 1rem;
-        }
-
         .nav-link {
-          border: 1px solid black;
+          border: 1px solid #5557A9;
           padding: 0.5rem 1rem;
           border-radius: 3px;
         }
         .nav-link:hover {
           color: white;
-          background: gray;
         }
       `}</style>
     </nav>

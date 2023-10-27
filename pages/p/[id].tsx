@@ -7,7 +7,7 @@ import { ReportProps } from "../../components/Report"
 import { GetServerSideProps } from "next"
 import { authOptions } from "../api/auth/[...nextauth]"
 import { getServerSession } from "next-auth/next"
-import { List, Button, Space, Card, Typography } from 'antd';
+import { List, Button, Space, Card, Typography } from "antd"
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons"
 import { useState } from "react"
 
@@ -38,54 +38,55 @@ const Report: React.FC<{ data: { report: ReportProps } }> = props => {
   const [bodyMaps, setBodyMaps] = useState<BodyMap[]>(data)
 
   let name = props.data.report.name
-  // const bodyMaps: BodyMap[] = props.data.report.bodymaps
 
   const authorName = props.data.report.user
     ? props.data.report.user.name
     : "Unknown user"
   return (
     <Layout>
-      <Card>
-        <h2>{name}</h2>
-        <Typography>By {authorName}</Typography>
-        <Typography>{props.data.report.date}</Typography>
-        <List
-          itemLayout="horizontal"
-          dataSource={bodyMaps}
-          renderItem={(item, index) => (
-            <List.Item>
-              <List.Item.Meta
-                title={<a href="https://ant.design">{item.label}</a>}
-                description={item.details}
-              />
-            </List.Item>
-          )}
-        />
-        <Space size="small">
-          <Button
-            type="primary"
-            icon={<EditOutlined />}
-            onClick={() => Router.push("/edit/[id]", `/edit/${id}`)}
-          >
-            Edit
-          </Button>
-          <Button
-            type="primary"
-            icon={<DeleteOutlined />}
-            danger
-            onClick={async e => {
-              await deleteReport({
-                variables: {
-                  id,
-                },
-              })
-              Router.push("/profile")
-            }}
-          >
-            Delete
-          </Button>
-        </Space>
-      </Card>
+      <main style={{ padding: "0 2rem" }}>
+        <Card>
+          <h2>{name}</h2>
+          <Typography>By {authorName}</Typography>
+          <Typography>{props.data.report.date}</Typography>
+          <List
+            itemLayout="horizontal"
+            dataSource={bodyMaps}
+            renderItem={(item, index) => (
+              <List.Item>
+                <List.Item.Meta
+                  title={<a href="https://ant.design">{item.label}</a>}
+                  description={item.details}
+                />
+              </List.Item>
+            )}
+          />
+          <Space size="small">
+            <Button
+              type="primary"
+              icon={<EditOutlined />}
+              onClick={() => Router.push("/edit/[id]", `/edit/${id}`)}
+            >
+              Edit
+            </Button>
+            <Button
+              type="primary"
+              icon={<DeleteOutlined />}
+              danger
+              onClick={async e => {
+                await deleteReport({
+                  variables: {
+                    id,
+                  },
+                })
+                Router.push("/profile")
+              }}
+            >
+              Delete
+            </Button>
+          </Space>
+        </Card>
+      </main>
     </Layout>
   )
 }

@@ -1,4 +1,5 @@
 import Header from './Header'
+import Footer from './Footer'
 
 type Props = {
   children: React.ReactNode
@@ -25,7 +26,7 @@ const Layout: React.FC<Props> = (props) => (
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
           Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
           'Segoe UI Symbol';
-        background: rgba(0, 0, 0, 0.05);
+        background: #F3F4F7;
       }
 
       input,
@@ -39,9 +40,10 @@ const Layout: React.FC<Props> = (props) => (
     `}</style>
     <style jsx>{`
       .layout {
-        padding: 0 2rem;
+        padding: 0 0rem;
       }
     `}</style>
+    <Footer />
   </div>
 )
 

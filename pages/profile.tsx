@@ -29,7 +29,9 @@ const Reports: React.FC<{ data: { profile: ReportProps[] } }> = props => {
   const [name, setName] = useState(null)
   const [date, setDate] = useState(null)
   const [form] = Form.useForm()
-  const authorName = props.data.profile[0].user ? props.data.profile[0].user.name : "Unknown user"
+  const authorName = props.data.profile[0].user
+    ? props.data.profile[0].user.name
+    : "Unknown user"
 
   const results = useQuery(FilterReport, {
     variables: {
@@ -44,16 +46,14 @@ const Reports: React.FC<{ data: { profile: ReportProps[] } }> = props => {
   }
   return (
     <Layout>
-      <div className="page">
-        <main>
-          <h1>welcome {authorName}</h1>
-          {props.data.profile.map(post => (
-              <div key={post.id} className="post">
-                <Report post={post} />
-              </div>
-            ))}
-        </main>
-      </div>
+      <main style={{ padding: "0 2rem" }}>
+        <h1>welcome {authorName}</h1>
+        {props.data.profile.map(post => (
+          <div key={post.id} className="post">
+            <Report post={post} />
+          </div>
+        ))}
+      </main>
       <style jsx>{`
         .post {
           background: white;
@@ -84,12 +84,12 @@ export const getServerSideProps: GetServerSideProps = async context => {
   }
 
   const user = await prisma.user.findUnique({
-    where: { email: session?.user?.email }
+    where: { email: session?.user?.email },
   })
-  if(!user) {
+  if (!user) {
     return
   }
-  const users:string = user?.id
+  const users: string = user?.id
   const { data } = await client.query({
     query: gql`
       query FeedQuery($id: String!) {
