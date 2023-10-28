@@ -67,8 +67,7 @@ const Header = () => {
       <style jsx>{`
         nav {
           background: #16151F;
-          padding: 2rem;
-          margin-bottom: 2rem;
+          padding: 1rem;
         }
 
         .bold {

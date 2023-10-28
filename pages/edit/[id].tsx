@@ -128,9 +128,9 @@ const Edit: React.FC<{
 
   return (
     <Layout>
-      <main style={{ padding: "0 2rem" }}>
+      <main style={{ padding: "2rem" }}>
         <div>
-          <h1>Edit Report</h1>
+          <h1 style={{ color: "#696CC4"}}>Edit Report</h1>
           <Form
             name="create-report"
             className="login-form"
@@ -173,7 +173,7 @@ const Edit: React.FC<{
         </div>
 
         <div>
-          <h1>Edit BodyMaps</h1>
+          <h1 style={{ color: "#696CC4"}}>Edit BodyMaps</h1>
           <Form
             name="edit-bodyMap"
             className="login-form"
@@ -269,7 +269,7 @@ const Edit: React.FC<{
           </Form>
         </div>
         <div>
-          <h1>Create BodyMaps</h1>
+          <h1 style={{ color: "#696CC4"}}>Create BodyMaps</h1>
           <p>Click on the bodymap image below to list injury</p>
           <Form
             name="create-bodyMap"

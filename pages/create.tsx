@@ -79,7 +79,8 @@ const Create: React.FC<{ data: string }> = props => {
 
   return (
     <Layout>
-      <main style={{ padding: "0 2rem" }}>
+      <main style={{ padding: "2rem" }}>
+        <h1 style={{ color: "#696CC4"}}>Create Reports</h1>
         {visible && (
           <Alert
             message="Please select injury type from body map picture below"

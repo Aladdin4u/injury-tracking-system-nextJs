@@ -42,9 +42,7 @@ builder.prismaObject("Report", {
   fields: t => ({
     id: t.exposeID("id"),
     name: t.exposeString("name"),
-    date: t.expose("date", {
-      type: "Date",
-    }),
+    date: t.exposeString("date"),
     createdAt: t.expose("createdAt", {
       type: "Date",
     }),
@@ -65,8 +63,7 @@ builder.prismaObject("BodyMap", {
 builder.queryField("feed", t =>
   t.prismaField({
     type: ["Report"],
-    resolve: async (_query, _parent, args, _info) =>
-      prisma.report.findMany({}),
+    resolve: async (_query, _parent, args, _info) => prisma.report.findMany({}),
   })
 )
 
@@ -114,14 +111,11 @@ builder.queryField("filterReports", t =>
       searchName: t.arg.string({ required: true }),
     },
     resolve: async (query, _parent, args, _info) => {
-      const or =
-        args.searchName
-          ? {
-              OR: [
-                { name: { contains: args.searchName } },
-              ],
-            }
-          : {}
+      const or = args.searchName
+        ? {
+            OR: [{ name: { contains: args.searchName } }],
+          }
+        : {}
       return prisma.report.findMany({
         ...query,
         where: { ...or },
@@ -175,7 +169,7 @@ builder.mutationField("createReport", t =>
     type: "Report",
     args: {
       name: t.arg.string({ required: true }),
-      date: t.arg({ type: "Date", required: true }),
+      date: t.arg.string({ required: true }),
       bodymaps: t.arg({
         type: [BodyMapInput],
         required: true,

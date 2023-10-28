@@ -11,7 +11,7 @@ const Footer = () => {
   return (
     <footer style={{ background: "#F3F4F7", padding: "2rem" }}>
       <Flex vertical justify="center" align="center">
-        <Title level={3}>Injury Tracker</Title>
+        <Title level={3} style={{ color: "#696CC4"}}>Injury Tracker</Title>
         <Text type="secondary" color="#363D4E">
           {" "}
           Lorem ipsum dolor, sit amet consectetur adipisicing elit.

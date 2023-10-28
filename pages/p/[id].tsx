@@ -25,17 +25,11 @@ const DeleteMutation = gql`
   }
 `
 
-type BodyMap = {
-  id: number
-  label: string
-  details: string
-}
-
 const Report: React.FC<{ data: { report: ReportProps } }> = props => {
   const id = useRouter().query.id
   const data = props.data.report.bodymaps
   const [deleteReport] = useMutation(DeleteMutation)
-  const [bodyMaps, setBodyMaps] = useState<BodyMap[]>(data)
+  const [bodyMaps, setBodyMaps] = useState(data)
 
   let name = props.data.report.name
 
@@ -44,7 +38,7 @@ const Report: React.FC<{ data: { report: ReportProps } }> = props => {
     : "Unknown user"
   return (
     <Layout>
-      <main style={{ padding: "0 2rem" }}>
+      <main style={{ padding: "2rem" }}>
         <Card>
           <h2>{name}</h2>
           <Typography>By {authorName}</Typography>
@@ -53,7 +47,7 @@ const Report: React.FC<{ data: { report: ReportProps } }> = props => {
             itemLayout="horizontal"
             dataSource={bodyMaps}
             renderItem={(item, index) => (
-              <List.Item>
+              <List.Item key={index}>
                 <List.Item.Meta
                   title={<a href="https://ant.design">{item.label}</a>}
                   description={item.details}

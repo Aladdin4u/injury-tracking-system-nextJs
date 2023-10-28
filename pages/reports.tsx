@@ -229,7 +229,7 @@ const Reports: React.FC<{ data: { feed: ReportProps[] } }> = props => {
   return (
     <Layout>
         <main style={{padding: "0 2rem"}}>
-          <h1>Reports</h1>
+          <h1 style={{ color: "#696CC4"}}>Reports</h1>
           <Table columns={columns} dataSource={data} />
         </main>
       <style jsx>{`
