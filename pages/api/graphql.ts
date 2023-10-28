@@ -42,7 +42,9 @@ builder.prismaObject("Report", {
   fields: t => ({
     id: t.exposeID("id"),
     name: t.exposeString("name"),
-    date: t.exposeString("date"),
+    date: t.expose("date", {
+      type: "Date",
+    }),
     createdAt: t.expose("createdAt", {
       type: "Date",
     }),
@@ -89,19 +91,6 @@ builder.queryField("users", t =>
   })
 )
 
-builder.queryField("findUser", t =>
-  t.prismaField({
-    type: "User",
-    args: {
-      email: t.arg.string({ required: true }),
-    },
-    resolve: async (_query, _parent, args, _info) =>
-      prisma.user.findUnique({
-        where: { email: args.email },
-      }),
-  })
-)
-
 builder.queryField("report", t =>
   t.prismaField({
     type: "Report",
@@ -109,9 +98,8 @@ builder.queryField("report", t =>
       id: t.arg.id({ required: true }),
     },
     nullable: true,
-    resolve: async (query, _parent, args, _info) =>
+    resolve: async (_query, _parent, args, _info) =>
       prisma.report.findUnique({
-        ...query,
         where: {
           id: Number(args.id),
         },
@@ -123,16 +111,14 @@ builder.queryField("filterReports", t =>
   t.prismaField({
     type: ["Report"],
     args: {
-      searchName: t.arg.string({ required: false }),
-      searchDate: t.arg.string({ required: false }),
+      searchName: t.arg.string({ required: true }),
     },
     resolve: async (query, _parent, args, _info) => {
       const or =
-        args.searchName || args.searchDate
+        args.searchName
           ? {
               OR: [
                 { name: { contains: args.searchName } },
-                { date: { contains: args.searchDate } },
               ],
             }
           : {}
@@ -166,7 +152,7 @@ builder.mutationField("deleteReport", t =>
   t.prismaField({
     type: "Report",
     args: {
-      id: t.arg.id({ required: true }),
+      id: t.arg.int({ required: true }),
     },
     resolve: async (query, _parent, args, _info) =>
       prisma.report.delete({
@@ -189,7 +175,7 @@ builder.mutationField("createReport", t =>
     type: "Report",
     args: {
       name: t.arg.string({ required: true }),
-      date: t.arg.string({ required: true }),
+      date: t.arg({ type: "Date", required: true }),
       bodymaps: t.arg({
         type: [BodyMapInput],
         required: true,
