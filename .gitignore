@@ -1,4 +1,4 @@
 node_modules/
 src/generated/
 .next/
-.env.local
+.env
