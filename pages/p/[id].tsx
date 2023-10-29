@@ -7,9 +7,10 @@ import { ReportProps } from "../../components/Report"
 import { GetServerSideProps } from "next"
 import { authOptions } from "../api/auth/[...nextauth]"
 import { getServerSession } from "next-auth/next"
-import { List, Button, Space, Card, Typography } from "antd"
+import { Button, Space, Card, Typography } from "antd"
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons"
 import { useState } from "react"
+const { Title, Text } = Typography
 
 const DeleteMutation = gql`
   mutation DeleteMutation($id: ID!) {
@@ -43,19 +44,16 @@ const Report: React.FC<{ data: { report: ReportProps } }> = props => {
           <h2>{name}</h2>
           <Typography>By {authorName}</Typography>
           <Typography>{props.data.report.date}</Typography>
-          <List
-            itemLayout="horizontal"
-            dataSource={bodyMaps}
-            renderItem={(item, index) => (
-              <List.Item key={index}>
-                <List.Item.Meta
-                  title={<a href="https://ant.design">{item.label}</a>}
-                  description={item.details}
-                />
-              </List.Item>
-            )}
-          />
-          <Space size="small">
+          <Title level={3}>Injury List</Title>
+          {bodyMaps instanceof Array ?
+            bodyMaps.map((bodyMap:any) => (
+              <Card key={bodyMap.id} title={bodyMap.label} size="small" bordered={false} style={{ background: "#F3F4F7", margin: "8px 0" }}>
+                <Text type="secondary">{bodyMap.details}</Text>
+              </Card>
+            )):
+            null
+            }
+          <Space size="small" style={{marginTop: 8}}>
             <Button
               type="primary"
               icon={<EditOutlined />}

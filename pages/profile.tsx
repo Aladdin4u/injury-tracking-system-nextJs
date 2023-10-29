@@ -83,11 +83,12 @@ export const getServerSideProps: GetServerSideProps = async context => {
     }
   }
 
+  const email:any =session?.user?.email
   const user = await prisma.user.findUnique({
-    where: { email: session?.user?.email },
+    where: { email },
   })
   if (!user) {
-    return
+    throw new Error('User not found!')
   }
   const users: string = user?.id
   const { data } = await client.query({

@@ -1,5 +1,4 @@
 import Layout from "../components/Layout"
-import Report, { ReportProps } from "../components/Report"
 import type { GetServerSideProps } from "next"
 import client from "../lib/apollo-client"
 import gql from "graphql-tag"
@@ -13,6 +12,12 @@ import type { ColumnType, ColumnsType } from "antd/es/table"
 import type { FilterConfirmProps } from "antd/es/table/interface"
 import dayjs from "dayjs"
 
+export type ReportProps = {
+  id: number
+  name: string
+  createdAt: Date
+  date: string
+}
 type DataIndex = keyof ReportProps
 
 const Reports: React.FC<{ data: { feed: ReportProps[] } }> = props => {
@@ -129,8 +134,8 @@ const Reports: React.FC<{ data: { feed: ReportProps[] } }> = props => {
     }) => (
       <div style={{ padding: 8 }} onKeyDown={e => e.stopPropagation()}>
         <RangePicker
-          onChange={e => {
-            setSelectedKeys([e])
+          onChange={(date, dateString) => {
+            setSelectedKeys(dateString)
           }}
           allowClear={true}
           style={{ marginBottom: 8, width: "100%", display: "flex" }}
@@ -181,10 +186,7 @@ const Reports: React.FC<{ data: { feed: ReportProps[] } }> = props => {
       <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
     ),
     onFilter: (value, record) =>
-      dayjs(record[dataIndex]).format("DD-MM-YYYY") >=
-        value[0].format("DD-MM-YYYY") &&
-      dayjs(record[dataIndex]).format("DD-MM-YYYY") <=
-        value[1].format("DD-MM-YYYY"),
+      dayjs(record[dataIndex]).format("YYYY-MM-DD") == value,
   })
 
   const [columns, setColumns] = useState<ColumnsType<ReportProps>>([
@@ -228,10 +230,10 @@ const Reports: React.FC<{ data: { feed: ReportProps[] } }> = props => {
 
   return (
     <Layout>
-        <main style={{padding: "0 2rem"}}>
-          <h1 style={{ color: "#696CC4"}}>Reports</h1>
-          <Table columns={columns} dataSource={data} />
-        </main>
+      <main style={{ padding: "0 2rem" }}>
+        <h1 style={{ color: "#696CC4" }}>Reports</h1>
+        <Table columns={columns} dataSource={data} />
+      </main>
       <style jsx>{`
         .post {
           background: white;
@@ -259,16 +261,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
           name
           date
           createdAt
-          bodymaps {
-            id
-            label
-            details
-          }
-          user {
-            id
-            name
-            email
-          }
         }
       }
     `,
