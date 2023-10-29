@@ -102,13 +102,15 @@ const Edit: React.FC<{
   }
 
   const onDeleteBodyMap = async (values: any) => {
-    let b = bodyMaps.map(body => body)
-    let data = {
-      id: b[values].id,
+    if (bodyMaps instanceof Array) {
+      let b = bodyMaps.map(body => body)
+      let data = {
+        id: b[values].id,
+      }
+      await deleteBodyMap({
+        variables: data,
+      })
     }
-    await deleteBodyMap({
-      variables: data,
-    })
   }
   const onCreateBodyMap = async (values: any) => {
     let data = {
@@ -130,7 +132,7 @@ const Edit: React.FC<{
     <Layout>
       <main style={{ padding: "2rem" }}>
         <div>
-          <h1 style={{ color: "#696CC4"}}>Edit Report</h1>
+          <h1 style={{ color: "#696CC4" }}>Edit Report</h1>
           <Form
             name="create-report"
             className="login-form"
@@ -157,7 +159,10 @@ const Edit: React.FC<{
               label="Date Time"
               rules={[{ required: true, message: "Please input your Date!" }]}
             >
-              <DatePicker format="YYYY-MM-DD HH:mm:ss" style={{display: "block"}} />
+              <DatePicker
+                format="YYYY-MM-DD HH:mm:ss"
+                style={{ display: "block" }}
+              />
             </Form.Item>
             <Form.Item>
               <Button
@@ -173,7 +178,7 @@ const Edit: React.FC<{
         </div>
 
         <div>
-          <h1 style={{ color: "#696CC4"}}>Edit BodyMaps</h1>
+          <h1 style={{ color: "#696CC4" }}>Edit BodyMaps</h1>
           <Form
             name="edit-bodyMap"
             className="login-form"
@@ -269,7 +274,7 @@ const Edit: React.FC<{
           </Form>
         </div>
         <div>
-          <h1 style={{ color: "#696CC4"}}>Create BodyMaps</h1>
+          <h1 style={{ color: "#696CC4" }}>Create BodyMaps</h1>
           <p>Click on the bodymap image below to list injury</p>
           <Form
             name="create-bodyMap"
