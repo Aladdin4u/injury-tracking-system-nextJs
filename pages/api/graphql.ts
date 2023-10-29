@@ -42,7 +42,9 @@ builder.prismaObject("Report", {
   fields: t => ({
     id: t.exposeID("id"),
     name: t.exposeString("name"),
-    date: t.exposeString("date"),
+    date: t.expose("date", {
+      type: "Date",
+    }),
     createdAt: t.expose("createdAt", {
       type: "Date",
     }),
