@@ -51,7 +51,7 @@ const Create: React.FC<{ data: string }> = props => {
     }
     let data = {
       name: values.name,
-      date: values["date"].format(`YYYY-MM-DDTHH:mm:ssZ[Z]`),
+      date: values["date"].format("YYYY-MM-DDTHH:mm:s.SSS[Z]"),
       bodymaps: values.BodyMaps,
       email: email,
     }
