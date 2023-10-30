@@ -149,7 +149,7 @@ builder.mutationField("deleteReport", t =>
   t.prismaField({
     type: "Report",
     args: {
-      id: t.arg.int({ required: true }),
+      id: t.arg.id({ required: true }),
     },
     resolve: async (query, _parent, args, _info) =>
       prisma.report.delete({

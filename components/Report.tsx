@@ -27,7 +27,7 @@ const Report: React.FC<{ post: ReportProps }> = ({ post }) => {
     <div onClick={() => Router.push("/p/[id]", `/p/${post.id}`)}>
       <h2>{post.name}</h2>
       <small>By {authorName}</small>
-      <small>{post.date.toString()}</small>
+      <ReactMarkdown children={post.date.toString()} />
       <style jsx>{`
         div {
           color: inherit;

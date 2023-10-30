@@ -91,6 +91,7 @@ const Edit: React.FC<{
     await editReport({
       variables: data,
     })
+    Router.push("/edit/[id]", `/edit/${id}`)
   }
 
   const onEditBodyMap = async (values: any) => {
@@ -98,7 +99,7 @@ const Edit: React.FC<{
     await editBodyMap({
       variables: data,
     })
-    Router.reload()
+    Router.push("/edit/[id]", `/edit/${id}`)
   }
 
   const onDeleteBodyMap = async (values: any) => {
@@ -110,6 +111,7 @@ const Edit: React.FC<{
       await deleteBodyMap({
         variables: data,
       })
+      Router.push("/edit/[id]", `/edit/${id}`)
     }
   }
   const onCreateBodyMap = async (values: any) => {
@@ -121,7 +123,7 @@ const Edit: React.FC<{
     await createBodyMap({
       variables: data,
     })
-    Router.reload()
+    Router.push("/edit/[id]", `/edit/${id}`)
   }
 
   const toolChart = (tooltipItems: any) => {
