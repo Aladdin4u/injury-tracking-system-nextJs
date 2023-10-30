@@ -14,7 +14,7 @@ import { Button, Card, Form, Input, DatePicker, Row, Col, Space } from "antd"
 import Chart from "../../components/Chart"
 
 const EditReportMutation = gql`
-  mutation EditReportMutation($id: ID!, $name: String!, $date: String!) {
+  mutation EditReportMutation($id: ID!, $name: String!, $date: Date!) {
     editReport(id: $id, name: $name, date: $date) {
       id
       name
@@ -86,11 +86,12 @@ const Edit: React.FC<{
     let data = {
       id: id,
       name: values.name,
-      date: values["date"].format("YYYY-MM-DD HH:mm:ss"),
+      date: values["date"].format("YYYY-MM-DDTHH:mm:ss.SSS[Z]"),
     }
     await editReport({
       variables: data,
     })
+    Router.push("/p/[id]", `/p/${id}`)
   }
 
   const onEditBodyMap = async (values: any) => {
@@ -98,7 +99,7 @@ const Edit: React.FC<{
     await editBodyMap({
       variables: data,
     })
-    Router.reload()
+    Router.push("/p/[id]", `/p/${id}`)
   }
 
   const onDeleteBodyMap = async (values: any) => {
@@ -110,6 +111,7 @@ const Edit: React.FC<{
       await deleteBodyMap({
         variables: data,
       })
+      Router.push("/p/[id]", `/p/${id}`)
     }
   }
   const onCreateBodyMap = async (values: any) => {
@@ -121,7 +123,7 @@ const Edit: React.FC<{
     await createBodyMap({
       variables: data,
     })
-    Router.reload()
+    Router.push("/p/[id]", `/p/${id}`)
   }
 
   const toolChart = (tooltipItems: any) => {

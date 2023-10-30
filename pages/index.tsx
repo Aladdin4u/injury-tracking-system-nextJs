@@ -1,13 +1,5 @@
 import Layout from "../components/Layout"
-import {
-  Button,
-  Card,
-  Flex,
-  Typography,
-  Row,
-  Col,
-  Divider,
-} from "antd"
+import { Button, Card, Flex, Typography, Row, Col, Divider } from "antd"
 const { Title, Text } = Typography
 
 const Blog = () => {
@@ -16,13 +8,17 @@ const Blog = () => {
       <main>
         <Card
           hoverable
-          bodyStyle={{ padding: 0, overflow: "hidden", backgroundColor: "#696CC4" }}
+          bodyStyle={{
+            padding: 0,
+            overflow: "hidden",
+            backgroundColor: "#696CC4",
+          }}
         >
           <Flex justify="space-between">
             <img
               alt="avatar"
-              src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-              style={{ display: "block", width: 573 }}
+              src="https://source.unsplash.com/brown-and-black-clipboard-with-white-spinal-cord-print-manual-IG96K_HiDk0"
+              style={{ display: "block", width: 640 }}
             />
             <Flex
               vertical
@@ -40,7 +36,11 @@ const Blog = () => {
             </Flex>
           </Flex>
         </Card>
-        <Flex vertical align="center" style={{ background: "#F3F4F7", padding: "3rem" }}>
+        <Flex
+          vertical
+          align="center"
+          style={{ background: "#F3F4F7", padding: "3rem" }}
+        >
           <Title level={2}>Our Features</Title>
           <Divider>why people love our product?</Divider>
           <Row gutter={16} style={{ marginTop: 16 }}>
@@ -124,7 +124,11 @@ const Blog = () => {
             </Col>
           </Row>
         </Flex>
-        <Flex vertical align="center" style={{ background: "white", padding: "3rem" }}>
+        <Flex
+          vertical
+          align="center"
+          style={{ background: "white", padding: "3rem" }}
+        >
           <Title level={2}>Benefits</Title>
           <Divider>Process of recording and tracking injuries</Divider>
           <Row gutter={16} style={{ marginTop: 16 }}>
