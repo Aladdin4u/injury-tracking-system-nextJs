@@ -1,6 +1,10 @@
 import React from "react"
 import Router from "next/router"
 import ReactMarkdown from "react-markdown"
+import {
+  Typography
+} from "antd"
+const { Title, Text } = Typography
 
 export type ReportProps = {
   id: number
@@ -23,7 +27,7 @@ const Report: React.FC<{ post: ReportProps }> = ({ post }) => {
     <div onClick={() => Router.push("/p/[id]", `/p/${post.id}`)}>
       <h2>{post.name}</h2>
       <small>By {authorName}</small>
-      <ReactMarkdown children={post.date} />
+      <small>{post.date.toString()}</small>
       <style jsx>{`
         div {
           color: inherit;

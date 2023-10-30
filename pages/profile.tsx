@@ -4,46 +4,14 @@ import { authOptions } from "./api/auth/[...nextauth]"
 import type { GetServerSideProps } from "next"
 import { getServerSession } from "next-auth/next"
 import client from "../lib/apollo-client"
-import { useQuery } from "@apollo/client"
 import gql from "graphql-tag"
-import { useState } from "react"
-import { Button, Card, Form, Input, Row, DatePicker } from "antd"
 import prisma from "../lib/prisma"
 
-const FilterReport = gql`
-  query FilterReport($searchName: String, $searchDate: String) {
-    filterReports(searchName: $searchName, searchDate: $searchDate) {
-      id
-      name
-      date
-      createdAt
-      user {
-        id
-        name
-      }
-    }
-  }
-`
-
 const Reports: React.FC<{ data: { profile: ReportProps[] } }> = props => {
-  const [name, setName] = useState(null)
-  const [date, setDate] = useState(null)
-  const [form] = Form.useForm()
   const authorName = props.data.profile[0].user
     ? props.data.profile[0].user.name
     : "Unknown user"
 
-  const results = useQuery(FilterReport, {
-    variables: {
-      searchName: name,
-      searchDate: date,
-    },
-    skip: !name || !date,
-  })
-  const onFinish = async (values: any) => {
-    setName(values.search)
-    setDate(values["date"].format("YYYY-MM-DD"))
-  }
   return (
     <Layout>
       <main style={{ padding: "0 2rem" }}>
@@ -83,12 +51,12 @@ export const getServerSideProps: GetServerSideProps = async context => {
     }
   }
 
-  const email:any =session?.user?.email
+  const email: any = session?.user?.email
   const user = await prisma.user.findUnique({
     where: { email },
   })
   if (!user) {
-    throw new Error('User not found!')
+    throw new Error("User not found!")
   }
   const users: string = user?.id
   const { data } = await client.query({

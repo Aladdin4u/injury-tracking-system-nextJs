@@ -16,7 +16,7 @@ export type ReportProps = {
   id: number
   name: string
   createdAt: Date
-  date: string
+  date: Date
 }
 type DataIndex = keyof ReportProps
 
