@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown"
 export type ReportProps = {
   id: number
   name: string
+  date: Date
   createdAt: Date
   bodymaps: {
     id: number
@@ -14,7 +15,6 @@ export type ReportProps = {
   user: {
     name: string
   }
-  date: string
 }
 
 const Report: React.FC<{ post: ReportProps }> = ({ post }) => {

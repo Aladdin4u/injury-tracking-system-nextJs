@@ -199,7 +199,7 @@ builder.mutationField("editReport", t =>
     args: {
       id: t.arg.id({ required: true }),
       name: t.arg.string({ required: true }),
-      date: t.arg.string({ required: true }),
+      date: t.arg({ type: "Date", required: true }),
     },
     resolve: async (query, _parent, args, _info) =>
       prisma.report.update({

@@ -7,22 +7,14 @@ import { useMutation } from "@apollo/client"
 import { authOptions } from "./api/auth/[...nextauth]"
 import { getServerSession } from "next-auth/next"
 import { CloseOutlined, UserOutlined } from "@ant-design/icons"
-import {
-  Button,
-  Card,
-  Form,
-  Input,
-  DatePicker,
-  Typography,
-  Alert,
-} from "antd"
+import { Button, Card, Form, Input, DatePicker, Typography, Alert } from "antd"
 import Link from "next/link"
 import Chart from "../components/Chart"
 
 const CreateReportMutation = gql`
   mutation CreateReportMutation(
     $name: String!
-    $date: String!
+    $date: Date!
     $email: String!
     $bodymaps: [BodyMapInput!]!
   ) {
@@ -80,7 +72,7 @@ const Create: React.FC<{ data: string }> = props => {
   return (
     <Layout>
       <main style={{ padding: "2rem" }}>
-        <h1 style={{ color: "#696CC4"}}>Create Reports</h1>
+        <h1 style={{ color: "#696CC4" }}>Create Reports</h1>
         {visible && (
           <Alert
             message="Please select injury type from body map picture below"
@@ -109,7 +101,10 @@ const Create: React.FC<{ data: string }> = props => {
             label="Date Time"
             rules={[{ required: true, message: "Please enter your Date!" }]}
           >
-            <DatePicker format="YYYY-MM-DD HH:mm:ss" style={{display: "block"}} />
+            <DatePicker
+              format="YYYY-MM-DD HH:mm:ss"
+              style={{ display: "block" }}
+            />
           </Form.Item>
           <p>Click on the bodymap image below to list injury</p>
           <Form.List name="BodyMaps">
@@ -212,20 +207,22 @@ const Create: React.FC<{ data: string }> = props => {
               </div>
             )}
           </Form.List>
-            <Form.Item>
-              <Button
-                type="primary"
-                htmlType="submit"
-                className="login-form-button"
-                block
-                style={{ marginTop: 8 }}
-              >
-                Create
-              </Button>
-            </Form.Item>
-            <Typography style={{ marginTop: 8, width: "100%", textAlign: "center" }}>
-              Or <Link href="/profile">Cancel</Link>
-            </Typography>
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="login-form-button"
+              block
+              style={{ marginTop: 8 }}
+            >
+              Create
+            </Button>
+          </Form.Item>
+          <Typography
+            style={{ marginTop: 8, width: "100%", textAlign: "center" }}
+          >
+            Or <Link href="/profile">Cancel</Link>
+          </Typography>
         </Form>
       </main>
     </Layout>

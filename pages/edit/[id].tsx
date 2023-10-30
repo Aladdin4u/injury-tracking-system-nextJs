@@ -14,7 +14,7 @@ import { Button, Card, Form, Input, DatePicker, Row, Col, Space } from "antd"
 import Chart from "../../components/Chart"
 
 const EditReportMutation = gql`
-  mutation EditReportMutation($id: ID!, $name: String!, $date: String!) {
+  mutation EditReportMutation($id: ID!, $name: String!, $date: Date!) {
     editReport(id: $id, name: $name, date: $date) {
       id
       name
