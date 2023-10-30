@@ -86,7 +86,7 @@ const Edit: React.FC<{
     let data = {
       id: id,
       name: values.name,
-      date: values["date"].format("YYYY-MM-DD HH:mm:ss"),
+      date: values["date"].format(`YYYY-MM-DDTHH:mm:ssZ[Z]`),
     }
     await editReport({
       variables: data,
