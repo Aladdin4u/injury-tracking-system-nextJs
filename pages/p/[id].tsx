@@ -43,7 +43,7 @@ const Report: React.FC<{ data: { report: ReportProps } }> = props => {
         <Card>
           <h2>{name}</h2>
           <Typography>By {authorName}</Typography>
-          <Typography>{props.data.report.date}</Typography>
+          <Typography>{props.data.report.date.toString()}</Typography>
           <Title level={3}>Injury List</Title>
           {bodyMaps instanceof Array ?
             bodyMaps.map((bodyMap:any) => (
