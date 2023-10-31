@@ -36,14 +36,14 @@ const Blog = () => {
               align="center"
               style={{ padding: "2rem", height: "100%" }}
             >
-              <Space direction="vertical" size="middle" style={{ marginBottom: "2rem", textAlign: "center" }}>
-                <Typography.Title level={3}>
+              <Space direction="vertical" style={{ marginBottom: "2rem", textAlign: "center" }}>
+                <Typography.Title level={1}>
                   Simplify Injury Reporting
                 </Typography.Title>
-                <Typography.Text>
-                  Effortlessly record and manage injuries, ensuring efficiency
+                <Typography.Title level={3}>
+                Effortlessly record and manage injuries, ensuring efficiency
                   and compliance.
-                </Typography.Text>
+                </Typography.Title>
               </Space>
               <Space size="middle">
                 <Button type="primary" href="/create" block>

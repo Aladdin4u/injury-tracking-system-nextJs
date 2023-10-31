@@ -25,7 +25,12 @@ const Header = () => {
           </Link>
         </div>
         <Menu
-          style={{ minWidth: 0, background: "none", color: "#696cc4" }}
+          style={{
+            minWidth: 200,
+            background: "none",
+            color: "#696cc4",
+            justifyContent: "flex-end",
+          }}
           mode="horizontal"
           items={[
             {
@@ -108,10 +113,11 @@ const Header = () => {
           display: inline-block;
         }
 
-        .nav-link {
-        }
         .nav-link:hover {
           color: white !important;
+        }
+        .ant-menu-light.ant-menu-horizontal > .ant-menu-item {
+          border-bottom-color: #696cc4 !important;
         }
       `}</style>
     </nav>
