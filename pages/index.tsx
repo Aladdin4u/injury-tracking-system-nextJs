@@ -1,5 +1,13 @@
 import Layout from "../components/Layout"
-import { Button, Card, Flex, Typography, Row, Col, Divider } from "antd"
+import {
+  Button,
+  Card,
+  Flex,
+  Typography,
+  Row,
+  Col,
+  Divider,
+} from "antd"
 const { Title, Text } = Typography
 
 const Blog = () => {
@@ -8,11 +16,7 @@ const Blog = () => {
       <main>
         <Card
           hoverable
-          bodyStyle={{
-            padding: 0,
-            overflow: "hidden",
-            backgroundColor: "#696CC4",
-          }}
+          bodyStyle={{ padding: 0, overflow: "hidden", backgroundColor: "#696CC4" }}
         >
           <Flex justify="space-between">
             <img
@@ -36,11 +40,7 @@ const Blog = () => {
             </Flex>
           </Flex>
         </Card>
-        <Flex
-          vertical
-          align="center"
-          style={{ background: "#F3F4F7", padding: "3rem" }}
-        >
+        <Flex vertical align="center" style={{ background: "#F3F4F7", padding: "3rem" }}>
           <Title level={2}>Our Features</Title>
           <Divider>why people love our product?</Divider>
           <Row gutter={16} style={{ marginTop: 16 }}>
@@ -124,11 +124,7 @@ const Blog = () => {
             </Col>
           </Row>
         </Flex>
-        <Flex
-          vertical
-          align="center"
-          style={{ background: "white", padding: "3rem" }}
-        >
+        <Flex vertical align="center" style={{ background: "white", padding: "3rem" }}>
           <Title level={2}>Benefits</Title>
           <Divider>Process of recording and tracking injuries</Divider>
           <Row gutter={16} style={{ marginTop: 16 }}>
