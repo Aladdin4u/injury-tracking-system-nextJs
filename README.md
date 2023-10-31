@@ -14,7 +14,7 @@ This aplication shows how to implement a **fullstack app in TypeScript with :
 
 ## Getting started
 
-### 1. Clone the entire repo and install dependencies
+### Clone the entire repo and install dependencies
 
 Clone the entire repo:
 
@@ -37,7 +37,7 @@ Once that's done, copy the .env.example file in this directory to .env (which wi
 cp .env.example .env
 ```
 
-### 1. Obtain OAuth 2.0 credentials from the Google API Console
+### Obtain OAuth 2.0 credentials from the Google API Console
 
 Visit the [Google API Console](https://developers.google.com/identity/protocols/oauth2) to obtain OAuth 2.0 credentials such as a client ID and client secret that are known to both Google and your application.
 
@@ -46,7 +46,7 @@ The "Authorized redirect URIs" used when creating the credentials must include y
 - For production: https://{YOUR_DOMAIN}/api/auth/callback/google
 - For development: http://localhost:3000/api/auth/callback/google
 
-### 1. Obtain postgres-prisma database URL
+### Obtain postgres-prisma database URL
 
 Visit the [Vercel Dashboard](https://vercel.com/dashboard) 
 - Select the Storage tab
