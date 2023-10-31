@@ -7,44 +7,65 @@ import {
   Row,
   Col,
   Divider,
+  Grid,
+  Space,
 } from "antd"
 const { Title, Text } = Typography
+const { useBreakpoint } = Grid
 
 const Blog = () => {
+  const screens = useBreakpoint()
+  const span = screens.xl ? 8 : screens.md || screens.sm ? 12 : 24
+  const hero = screens.xl ? 12 : screens.md || screens.sm ? 12 : 24
+
   return (
     <Layout>
       <main>
-        <Card
-          hoverable
-          bodyStyle={{ padding: 0, overflow: "hidden", backgroundColor: "#696CC4" }}
-        >
-          <Flex justify="space-between">
+        <Row gutter={16} style={{ background: "white" }}>
+          <Col span={hero}>
             <img
               alt="avatar"
               src="https://source.unsplash.com/brown-and-black-clipboard-with-white-spinal-cord-print-manual-IG96K_HiDk0"
-              style={{ display: "block", width: 640 }}
+              style={{ width: "100%" }}
             />
+          </Col>
+          <Col span={hero}>
             <Flex
               vertical
-              align="flex-end"
               justify="space-between"
-              style={{ padding: 32, background: "#F3F4F7" }}
+              align="center"
+              style={{ padding: "2rem", height: "100%" }}
             >
-              <Typography.Title level={3}>
-                “A web application to record and track the injuries reported by
-                a person”
-              </Typography.Title>
-              <Button type="primary" href="/create" block>
-                Get Started
-              </Button>
+              <Space direction="vertical" size="middle" style={{ marginBottom: "2rem", textAlign: "center" }}>
+                <Typography.Title level={3}>
+                  Simplify Injury Reporting
+                </Typography.Title>
+                <Typography.Text>
+                  Effortlessly record and manage injuries, ensuring efficiency
+                  and compliance.
+                </Typography.Text>
+              </Space>
+              <Space size="middle">
+                <Button type="primary" href="/create" block>
+                  Get Started
+                </Button>
+                <Button type="default" href="/create" block>
+                  Request a Demo
+                </Button>
+              </Space>
             </Flex>
-          </Flex>
-        </Card>
-        <Flex vertical align="center" style={{ background: "#F3F4F7", padding: "3rem" }}>
+          </Col>
+        </Row>
+        <Flex
+          vertical
+          align="center"
+          wrap="wrap"
+          style={{ background: "#F3F4F7", padding: "3rem" }}
+        >
           <Title level={2}>Our Features</Title>
           <Divider>why people love our product?</Divider>
-          <Row gutter={16} style={{ marginTop: 16 }}>
-            <Col span={8}>
+          <Row gutter={16} style={{ marginTop: 16 }} wrap={true}>
+            <Col span={span}>
               <Card bordered={false} style={{ background: "none" }}>
                 <Title level={3}>Easy Injury Reporting</Title>
                 <Text type="secondary">
@@ -57,7 +78,7 @@ const Blog = () => {
                 </Text>
               </Card>
             </Col>
-            <Col span={8}>
+            <Col span={span}>
               <Card bordered={false} style={{ background: "none" }}>
                 <Title level={3}>Customizable Forms</Title>
                 <Text type="secondary">
@@ -70,7 +91,7 @@ const Blog = () => {
                 </Text>
               </Card>
             </Col>
-            <Col span={8}>
+            <Col span={span}>
               <Card bordered={false} style={{ background: "none" }}>
                 <Title level={3}>Real-time Tracking</Title>
                 <Text type="secondary">
@@ -83,7 +104,7 @@ const Blog = () => {
                 </Text>
               </Card>
             </Col>
-            <Col span={8}>
+            <Col span={span}>
               <Card bordered={false} style={{ background: "none" }}>
                 <Title level={3}>Secure Data Storage</Title>
                 <Text type="secondary">
@@ -96,7 +117,7 @@ const Blog = () => {
                 </Text>
               </Card>
             </Col>
-            <Col span={8}>
+            <Col span={span}>
               <Card bordered={false} style={{ background: "none" }}>
                 <Title level={3}>Analytics and Reporting</Title>
                 <Text type="secondary">
@@ -109,7 +130,7 @@ const Blog = () => {
                 </Text>
               </Card>
             </Col>
-            <Col span={8}>
+            <Col span={span}>
               <Card bordered={false} style={{ background: "none" }}>
                 <Title level={3}>Mobile Accessibility</Title>
                 <Text type="secondary">
@@ -124,11 +145,15 @@ const Blog = () => {
             </Col>
           </Row>
         </Flex>
-        <Flex vertical align="center" style={{ background: "white", padding: "3rem" }}>
+        <Flex
+          vertical
+          align="center"
+          style={{ background: "white", padding: "3rem" }}
+        >
           <Title level={2}>Benefits</Title>
           <Divider>Process of recording and tracking injuries</Divider>
           <Row gutter={16} style={{ marginTop: 16 }}>
-            <Col span={8}>
+            <Col span={span}>
               <Card bordered={false} style={{ background: "none" }}>
                 <Title level={3}>Improved Record Keeping</Title>
                 <Text type="secondary">
@@ -141,7 +166,7 @@ const Blog = () => {
                 </Text>
               </Card>
             </Col>
-            <Col span={8}>
+            <Col span={span}>
               <Card bordered={false} style={{ background: "none" }}>
                 <Title level={3}>Efficient and Accurate Reporting</Title>
                 <Text type="secondary">
@@ -154,7 +179,7 @@ const Blog = () => {
                 </Text>
               </Card>
             </Col>
-            <Col span={8}>
+            <Col span={span}>
               <Card bordered={false} style={{ background: "none" }}>
                 <Title level={3}>Enhanced Data Security</Title>
                 <Text type="secondary">
