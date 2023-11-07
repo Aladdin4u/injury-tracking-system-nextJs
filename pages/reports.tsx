@@ -5,11 +5,12 @@ import gql from "graphql-tag"
 import React, { useRef, useState } from "react"
 import Highlighter from "react-highlight-words"
 import type { InputRef } from "antd"
-import { Button, Input, Space, Table, DatePicker } from "antd"
+import { Button, Input, Space, Table, DatePicker, Grid } from "antd"
 const { RangePicker } = DatePicker
 import { SearchOutlined } from "@ant-design/icons"
 import type { ColumnType, ColumnsType } from "antd/es/table"
 import type { FilterConfirmProps } from "antd/es/table/interface"
+const { useBreakpoint } = Grid
 import dayjs from "dayjs"
 
 export type ReportProps = {
@@ -21,6 +22,10 @@ export type ReportProps = {
 type DataIndex = keyof ReportProps
 
 const Reports: React.FC<{ data: { feed: ReportProps[] } }> = props => {
+  const screens = useBreakpoint()
+  const font = screens.xs ? "12px" : "14px"
+  console.log(screens)
+
   const [searchText, setSearchText] = useState("")
   const [searchedColumn, setSearchedColumn] = useState("")
   const searchInput = useRef<InputRef>(null)
@@ -232,7 +237,11 @@ const Reports: React.FC<{ data: { feed: ReportProps[] } }> = props => {
     <Layout>
       <main style={{ padding: "0 2rem" }}>
         <h1 style={{ color: "#696CC4" }}>Reports</h1>
-        <Table columns={columns} dataSource={data} />
+        <Table
+          columns={columns}
+          dataSource={data}
+          style={{ overflow: "auto" }}
+        />
       </main>
       <style jsx>{`
         .post {
