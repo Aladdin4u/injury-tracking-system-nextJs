@@ -36,12 +36,15 @@ const Blog = () => {
               align="center"
               style={{ padding: "2rem", height: "100%" }}
             >
-              <Space direction="vertical" style={{ marginBottom: "2rem", textAlign: "center" }}>
+              <Space
+                direction="vertical"
+                style={{ marginBottom: "2rem", textAlign: "center" }}
+              >
                 <Typography.Title level={1}>
                   Simplify Injury Reporting
                 </Typography.Title>
                 <Typography.Title level={3}>
-                Effortlessly record and manage injuries, ensuring efficiency
+                  Effortlessly record and manage injuries, ensuring efficiency
                   and compliance.
                 </Typography.Title>
               </Space>
@@ -60,10 +63,10 @@ const Blog = () => {
           vertical
           align="center"
           wrap="wrap"
-          style={{ background: "#F3F4F7", padding: "3rem" }}
+          style={{ background: "#F3F4F7", padding: "3rem", textAlign: "center" }}
         >
           <Title level={2}>Our Features</Title>
-          <Divider>why people love our product?</Divider>
+          <Divider style={{ textAlign: "center" }}>why people love our product?</Divider>
           <Row gutter={16} style={{ marginTop: 16 }} wrap={true}>
             <Col span={span}>
               <Card bordered={false} style={{ background: "none" }}>
@@ -148,10 +151,12 @@ const Blog = () => {
         <Flex
           vertical
           align="center"
-          style={{ background: "white", padding: "3rem" }}
+          style={{ background: "white", padding: "3rem", textAlign: "center" }}
         >
           <Title level={2}>Benefits</Title>
-          <Divider>Process of recording and tracking injuries</Divider>
+          <Divider style={{ textAlign: "center" }}>
+            Process of tracking injuries
+          </Divider>
           <Row gutter={16} style={{ marginTop: 16 }}>
             <Col span={span}>
               <Card bordered={false} style={{ background: "none" }}>
