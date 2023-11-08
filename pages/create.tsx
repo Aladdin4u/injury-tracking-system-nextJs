@@ -200,7 +200,7 @@ const Create: React.FC<{ data: string }> = props => {
                         },
                       ]}
                     >
-                      <Input placeholder="Describe the Injury" />
+                      <Input placeholder="Describe the Injury" autoFocus />
                     </Form.Item>
                   </Card>
                 ))}
