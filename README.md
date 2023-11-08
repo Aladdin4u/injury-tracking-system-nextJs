@@ -54,10 +54,24 @@ Visit the [Vercel Dashboard](https://vercel.com/dashboard)
 - Once that's done, Select the .env.local tab
 - Copy **POSTGRES_PRISMA_URL** and **POSTGRES_URL_NON_POOLING** secret
 
+### Create and seed the database
+
+Run the following command to create your PostreSQL database file. This also creates the `User`, `Report` and `BodyMap` tables that are defined in [`prisma/schema.prisma`](./prisma/schema.prisma):
+
+```
+npx prisma migrate dev --name init
+```
+
+When `npx prisma migrate dev` is executed against a newly created database, seeding is also triggered. The seed file in [`prisma/seed.ts`](./prisma/seed.ts) will be executed and your database will be populated with the sample data.
+
 **Note:**
 To use SQLite or other Postgres Database check out [Prisma docs](https://www.prisma.io/docs/concepts/database-connectors/postgresql)
 
-## Usage:
+### Start the app
 Once the environment variables is set
 
-1. run `npm run dev`
+```
+npm run dev
+```
+
+The app is now running, navigate to [`http://localhost:3000/`](http://localhost:3000/) in your browser to explore its UI.
