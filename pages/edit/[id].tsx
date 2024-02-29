@@ -12,6 +12,7 @@ import { CloseOutlined, UserOutlined, DeleteOutlined } from "@ant-design/icons"
 import dayjs from "dayjs"
 import { Button, Card, Form, Input, DatePicker, Row, Col, Space } from "antd"
 import Chart from "../../components/Chart"
+import prisma from "../../lib/prisma"
 
 const EditReportMutation = gql`
   mutation EditReportMutation($id: ID!, $name: String!, $date: Date!) {
@@ -415,6 +416,22 @@ export const getServerSideProps: GetServerSideProps = async context => {
       ? context.params?.id[0]
       : context.params?.id
   )
+
+  const currentUser = await prisma.user.findUnique({
+    where: { email: session.user?.email! },
+  })
+
+  const reportOwner = await prisma.report.findFirst({
+    where: {
+      id: id,
+      userId: currentUser?.id,
+    },
+  })
+
+  if (!reportOwner) {
+    throw new Error("Unauthorized")
+  }
+
   const { data } = await client.query({
     query: gql`
       query ReportQuery($id: ID!) {

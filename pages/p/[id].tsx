@@ -10,6 +10,7 @@ import { getServerSession } from "next-auth/next"
 import { Button, Space, Card, Typography } from "antd"
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons"
 import { useState } from "react"
+import prisma from "../../lib/prisma"
 const { Title, Text } = Typography
 
 const DeleteMutation = gql`
@@ -45,15 +46,20 @@ const Report: React.FC<{ data: { report: ReportProps } }> = props => {
           <Typography>By {authorName}</Typography>
           <Typography>{props.data.report.date.toString()}</Typography>
           <Title level={3}>Injury List</Title>
-          {bodyMaps instanceof Array ?
-            bodyMaps.map((bodyMap:any) => (
-              <Card key={bodyMap.id} title={bodyMap.label} size="small" bordered={false} style={{ background: "#F3F4F7", margin: "8px 0" }}>
-                <Text type="secondary">{bodyMap.details}</Text>
-              </Card>
-            )):
-            null
-            }
-          <Space size="small" style={{marginTop: 8}}>
+          {bodyMaps instanceof Array
+            ? bodyMaps.map((bodyMap: any) => (
+                <Card
+                  key={bodyMap.id}
+                  title={bodyMap.label}
+                  size="small"
+                  bordered={false}
+                  style={{ background: "#F3F4F7", margin: "8px 0" }}
+                >
+                  <Text type="secondary">{bodyMap.details}</Text>
+                </Card>
+              ))
+            : null}
+          <Space size="small" style={{ marginTop: 8 }}>
             <Button
               type="primary"
               icon={<EditOutlined />}
@@ -93,11 +99,28 @@ export const getServerSideProps: GetServerSideProps = async context => {
       },
     }
   }
+
   const id = Number(
     Array.isArray(context.params?.id)
       ? context.params?.id[0]
       : context.params?.id
   )
+
+  const currentUser = await prisma.user.findUnique({
+    where: { email: session.user?.email! },
+  })
+
+  const reportOwner = await prisma.report.findFirst({
+    where: { 
+      id: id,
+      userId: currentUser?.id 
+    },
+  })
+
+  if (!reportOwner) {
+    throw new Error("Unauthorized")
+  }
+
   const { data } = await client.query({
     query: gql`
       query ReportQuery($id: ID!) {
