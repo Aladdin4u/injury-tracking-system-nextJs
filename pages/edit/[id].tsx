@@ -137,7 +137,7 @@ const Edit: React.FC<{
         <div>
           <h1 style={{ color: "#696CC4" }}>Edit Report</h1>
           <Form
-            name="create-report"
+            name="edit-report"
             className="login-form"
             initialValues={{
               name: name,
