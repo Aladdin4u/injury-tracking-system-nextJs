@@ -86,7 +86,6 @@ const Create: React.FC<{ data: string }> = props => {
         )}
         <CreateReportForm
           label={label}
-          isVisible={visible}
           handleLabel={handleLabel}
           handleOnFinish={onFinish}
         />

@@ -1,16 +1,27 @@
-import Layout from "../../components/Layout"
+import { useState } from "react"
+import { GetServerSideProps } from "next"
 import Router, { useRouter } from "next/router"
+import { getServerSession } from "next-auth/next"
+import { authOptions } from "../api/auth/[...nextauth]"
+
+import Layout from "../../components/Layout"
+import { ReportProps } from "../../components/Report"
+
 import gql from "graphql-tag"
 import { useMutation } from "@apollo/client"
 import client from "../../lib/apollo-client"
-import { ReportProps } from "../../components/Report"
-import { GetServerSideProps } from "next"
-import { authOptions } from "../api/auth/[...nextauth]"
-import { getServerSession } from "next-auth/next"
-import { Button, Space, Card, Typography } from "antd"
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons"
-import { useState } from "react"
 import prisma from "../../lib/prisma"
+
+import { 
+  Button, 
+  Space, 
+  Card, 
+  Typography 
+} from "antd"
+import { 
+  EditOutlined, 
+  DeleteOutlined 
+} from "@ant-design/icons"
 const { Title, Text } = Typography
 
 const DeleteMutation = gql`

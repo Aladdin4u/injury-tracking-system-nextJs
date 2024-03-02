@@ -1,53 +1,30 @@
-import Link from "next/link"
 import Chart from "./Chart"
 
-import { 
-  CloseOutlined,
-  UserOutlined 
-} from "@ant-design/icons"
 import { 
   Button, 
   Card, 
   Form, 
-  Input, 
-  DatePicker, 
-  Typography 
+  Input 
 } from "antd"
+import { CloseOutlined } from "@ant-design/icons"
 
-interface CreateReportProps {
+interface CreateBodyMapProps {
   label: string
   handleOnFinish: (values: any) => void
   handleLabel: (values: any) => void
 }
 
-export const CreateReportForm = ({
-    label,
-    handleLabel,
-    handleOnFinish,
-}: CreateReportProps) => {
-  
+export const CreateBodyMapForm = ({
+  label,
+  handleLabel,
+  handleOnFinish,
+}: CreateBodyMapProps) => {
   return (
-    <Form name="create-report" className="login-form" onFinish={handleOnFinish}>
-      <Form.Item
-        name="name"
-        label="Reporter Name"
-        rules={[
-          { required: true, message: "Please enter your Reporter Name!" },
-        ]}
-      >
-        <Input
-          prefix={<UserOutlined className="site-form-item-icon" />}
-          placeholder="Reporter Name"
-        />
-      </Form.Item>
-      <Form.Item
-        name="date"
-        label="Date Time"
-        rules={[{ required: true, message: "Please enter your Date!" }]}
-      >
-        <DatePicker format="YYYY-MM-DD HH:mm:ss" style={{ display: "block" }} />
-      </Form.Item>
-      <p>Click on the bodymap image below to list injury</p>
+    <Form
+      name="create-bodyMap"
+      className="login-form"
+      onFinish={handleOnFinish}
+    >
       <Form.List name="BodyMaps">
         {(fields, { add, remove }) => (
           <div
@@ -127,7 +104,7 @@ export const CreateReportForm = ({
                   rules={[
                     {
                       required: true,
-                      message: "Please enter Injury Label!",
+                      message: "Please input Injury Label!",
                     },
                   ]}
                 >
@@ -139,31 +116,27 @@ export const CreateReportForm = ({
                   rules={[
                     {
                       required: true,
-                      message: "Please enter Injury description!",
+                      message: "Please input Injury description!",
                     },
                   ]}
                 >
-                  <Input placeholder="Describe the Injury" autoFocus />
+                  <Input placeholder="Describe the Injury" />
+                </Form.Item>
+                <Form.Item style={{ marginTop: 12 }}>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    className="login-form-button"
+                    block
+                  >
+                    Create injury
+                  </Button>
                 </Form.Item>
               </Card>
             ))}
           </div>
         )}
       </Form.List>
-      <Form.Item>
-        <Button
-          type="primary"
-          htmlType="submit"
-          className="login-form-button"
-          block
-          style={{ marginTop: 8 }}
-        >
-          Create
-        </Button>
-      </Form.Item>
-      <Typography style={{ marginTop: 8, width: "100%", textAlign: "center" }}>
-        Or <Link href="/profile">Cancel</Link>
-      </Typography>
     </Form>
   )
 }
