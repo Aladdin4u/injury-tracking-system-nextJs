@@ -12,10 +12,12 @@ import { EditBodyMapForm } from "../../components/Edit-BodyMap-Form"
 import { CreateBodyMapForm } from "../../components/Create-BodyMap-Form"
 
 import gql from "graphql-tag"
-import prisma from "../../lib/prisma"
 import client from "../../lib/apollo-client"
 import { useMutation } from "@apollo/client"
-
+import { 
+  getUserByEmail, 
+  getUserReport 
+} from '../../lib/user-service';
 
 const EditReportMutation = gql`
   mutation EditReportMutation($id: ID!, $name: String!, $date: Date!) {
@@ -185,18 +187,15 @@ export const getServerSideProps: GetServerSideProps = async context => {
       : context.params?.id
   )
 
-  const currentUser = await prisma.user.findUnique({
-    where: { email: session.user?.email! },
-  })
+  const getUser = await getUserByEmail(session.user?.email!)
 
-  const reportOwner = await prisma.report.findFirst({
-    where: {
-      id: id,
-      userId: currentUser?.id,
-    },
-  })
+  if (!getUser) {
+    throw new Error("User not found")
+  }
 
-  if (!reportOwner) {
+  const userReport = await getUserReport(id, getUser?.id)
+
+  if (!userReport) {
     throw new Error("Unauthorized")
   }
 
