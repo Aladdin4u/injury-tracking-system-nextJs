@@ -1,15 +1,30 @@
-import Layout from "../../components/Layout"
+import { useState } from "react"
+import { GetServerSideProps } from "next"
 import Router, { useRouter } from "next/router"
+import { getServerSession } from "next-auth/next"
+import { authOptions } from "../api/auth/[...nextauth]"
+
+import Layout from "../../components/Layout"
+import { ReportProps } from "../../components/Report"
+
 import gql from "graphql-tag"
 import { useMutation } from "@apollo/client"
 import client from "../../lib/apollo-client"
-import { ReportProps } from "../../components/Report"
-import { GetServerSideProps } from "next"
-import { authOptions } from "../api/auth/[...nextauth]"
-import { getServerSession } from "next-auth/next"
-import { Button, Space, Card, Typography } from "antd"
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons"
-import { useState } from "react"
+import { 
+  getUserByEmail, 
+  getUserReport 
+} from "../../lib/user-service"
+
+import { 
+  Button, 
+  Space, 
+  Card, 
+  Typography 
+} from "antd"
+import { 
+  EditOutlined, 
+  DeleteOutlined 
+} from "@ant-design/icons"
 const { Title, Text } = Typography
 
 const DeleteMutation = gql`
@@ -45,15 +60,20 @@ const Report: React.FC<{ data: { report: ReportProps } }> = props => {
           <Typography>By {authorName}</Typography>
           <Typography>{props.data.report.date.toString()}</Typography>
           <Title level={3}>Injury List</Title>
-          {bodyMaps instanceof Array ?
-            bodyMaps.map((bodyMap:any) => (
-              <Card key={bodyMap.id} title={bodyMap.label} size="small" bordered={false} style={{ background: "#F3F4F7", margin: "8px 0" }}>
-                <Text type="secondary">{bodyMap.details}</Text>
-              </Card>
-            )):
-            null
-            }
-          <Space size="small" style={{marginTop: 8}}>
+          {bodyMaps instanceof Array
+            ? bodyMaps.map((bodyMap: any) => (
+                <Card
+                  key={bodyMap.id}
+                  title={bodyMap.label}
+                  size="small"
+                  bordered={false}
+                  style={{ background: "#F3F4F7", margin: "8px 0" }}
+                >
+                  <Text type="secondary">{bodyMap.details}</Text>
+                </Card>
+              ))
+            : null}
+          <Space size="small" style={{ marginTop: 8 }}>
             <Button
               type="primary"
               icon={<EditOutlined />}
@@ -93,11 +113,25 @@ export const getServerSideProps: GetServerSideProps = async context => {
       },
     }
   }
+
   const id = Number(
     Array.isArray(context.params?.id)
       ? context.params?.id[0]
       : context.params?.id
   )
+
+  const getUser = await getUserByEmail(session.user?.email!)
+
+  if (!getUser) {
+    throw new Error("User not found")
+  }
+
+  const userReport = await getUserReport(id, getUser?.id)
+
+  if (!userReport) {
+    throw new Error("Unauthorized")
+  }
+
   const { data } = await client.query({
     query: gql`
       query ReportQuery($id: ID!) {

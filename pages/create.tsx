@@ -1,15 +1,16 @@
+import Router from "next/router"
 import React, { useState } from "react"
 import type { GetServerSideProps } from "next"
+import { getServerSession } from "next-auth/next"
+import { authOptions } from "./api/auth/[...nextauth]"
+
 import Layout from "../components/Layout"
-import Router from "next/router"
+import { CreateReportForm } from "../components/Create-Report-Form"
+
 import gql from "graphql-tag"
 import { useMutation } from "@apollo/client"
-import { authOptions } from "./api/auth/[...nextauth]"
-import { getServerSession } from "next-auth/next"
-import { CloseOutlined, UserOutlined } from "@ant-design/icons"
-import { Button, Card, Form, Input, DatePicker, Typography, Alert } from "antd"
-import Link from "next/link"
-import Chart from "../components/Chart"
+
+import { Alert } from "antd"
 
 const CreateReportMutation = gql`
   mutation CreateReportMutation(
@@ -65,8 +66,8 @@ const Create: React.FC<{ data: string }> = props => {
     setVisible(false)
   }
 
-  const toolChart = (tooltipItems: any) => {
-    return tooltipItems.label
+  const handleLabel = (event: any) => {
+    setLabel(event)
   }
 
   return (
@@ -83,147 +84,11 @@ const Create: React.FC<{ data: string }> = props => {
             style={{ marginBottom: 8 }}
           />
         )}
-        <Form name="create-report" className="login-form" onFinish={onFinish}>
-          <Form.Item
-            name="name"
-            label="Reporter Name"
-            rules={[
-              { required: true, message: "Please enter your Reporter Name!" },
-            ]}
-          >
-            <Input
-              prefix={<UserOutlined className="site-form-item-icon" />}
-              placeholder="Reporter Name"
-            />
-          </Form.Item>
-          <Form.Item
-            name="date"
-            label="Date Time"
-            rules={[{ required: true, message: "Please enter your Date!" }]}
-          >
-            <DatePicker
-              format="YYYY-MM-DD HH:mm:ss"
-              style={{ display: "block" }}
-            />
-          </Form.Item>
-          <p>Click on the bodymap image below to list injury</p>
-          <Form.List name="BodyMaps">
-            {(fields, { add, remove }) => (
-              <div
-                style={{
-                  display: "flex",
-                  rowGap: 16,
-                  flexDirection: "column",
-                }}
-              >
-                <Chart
-                  options={{
-                    onClick: (event: any) => {
-                      add()
-                      setLabel(event.chart.tooltip.dataPoints[0].label)
-                    },
-                    scales: {
-                      x: {
-                        min: 0,
-                        max: 100,
-                        grid: {
-                          display: false,
-                        },
-                        ticks: {
-                          display: false,
-                        },
-                      },
-                      y: {
-                        min: 0,
-                        max: 100,
-                        grid: {
-                          display: false,
-                        },
-                        ticks: {
-                          display: false,
-                        },
-                      },
-                    },
-                    elements: {
-                      point: {
-                        pointStyle: "circle",
-                      },
-                    },
-                    plugins: {
-                      tooltip: {
-                        yAlign: "bottom",
-                        displayColors: false,
-                        callbacks: {
-                          events: ["click"],
-                          label: toolChart,
-                          title: () => {
-                            return ""
-                          },
-                        },
-                      },
-                    },
-                  }}
-                />
-                {fields.map(field => (
-                  <Card
-                    size="small"
-                    title={`List Injury ${field.name + 1}`}
-                    key={field.key}
-                    extra={
-                      <CloseOutlined
-                        onClick={() => {
-                          remove(field.name)
-                        }}
-                      />
-                    }
-                  >
-                    <Form.Item
-                      label="label"
-                      name={[field.name, "label"]}
-                      initialValue={label}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please enter Injury Label!",
-                        },
-                      ]}
-                    >
-                      <Input placeholder="Label" disabled />
-                    </Form.Item>
-                    <Form.Item
-                      label="Description"
-                      name={[field.name, "details"]}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please enter Injury description!",
-                        },
-                      ]}
-                    >
-                      <Input placeholder="Describe the Injury" autoFocus />
-                    </Form.Item>
-                  </Card>
-                ))}
-              </div>
-            )}
-          </Form.List>
-          <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              className="login-form-button"
-              block
-              style={{ marginTop: 8 }}
-            >
-              Create
-            </Button>
-          </Form.Item>
-          <Typography
-            style={{ marginTop: 8, width: "100%", textAlign: "center" }}
-          >
-            Or <Link href="/profile">Cancel</Link>
-          </Typography>
-        </Form>
+        <CreateReportForm
+          label={label}
+          handleLabel={handleLabel}
+          handleOnFinish={onFinish}
+        />
       </main>
     </Layout>
   )

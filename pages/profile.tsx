@@ -5,7 +5,7 @@ import type { GetServerSideProps } from "next"
 import { getServerSession } from "next-auth/next"
 import client from "../lib/apollo-client"
 import gql from "graphql-tag"
-import prisma from "../lib/prisma"
+import { getUserByEmail } from "../lib/user-service"
 
 const Reports: React.FC<{ data: { profile: ReportProps[] } }> = props => {
   const authorName = props.data.profile[0].user
@@ -51,14 +51,14 @@ export const getServerSideProps: GetServerSideProps = async context => {
     }
   }
 
-  const email: any = session?.user?.email
-  const user = await prisma.user.findUnique({
-    where: { email },
-  })
-  if (!user) {
-    throw new Error("User not found!")
+  const email: string = session.user?.email!
+  const getUser = await getUserByEmail(email)
+
+  if (!getUser) {
+    throw new Error("Unauthorized")
   }
-  const users: string = user?.id
+
+  const userId: string = getUser.id
   const { data } = await client.query({
     query: gql`
       query FeedQuery($id: String!) {
@@ -80,7 +80,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
         }
       }
     `,
-    variables: { id: users },
+    variables: { id: userId },
   })
 
   return {
