@@ -1,16 +1,13 @@
 import Layout from "../components/Layout"
 import {
   Button,
-  Card,
   Flex,
   Typography,
   Row,
   Col,
-  Divider,
   Grid,
   Space,
 } from "antd"
-const { Title, Text } = Typography
 const { useBreakpoint } = Grid
 
 const Blog = () => {
@@ -49,7 +46,7 @@ const Blog = () => {
                 </Typography.Title>
               </Space>
               <Space size="middle">
-                <Button type="primary" href="/create" block>
+                <Button type="primary" href="/api/auth/signin" block>
                   Get Started
                 </Button>
                 <Button type="default" href="/create" block>

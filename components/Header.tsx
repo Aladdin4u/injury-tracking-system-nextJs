@@ -2,8 +2,36 @@ import Link from "next/link"
 import { useState } from "react"
 import { useRouter } from "next/router"
 import { useSession, signOut } from "next-auth/react"
-import { Avatar, Space, Button, Flex, Menu } from "antd"
-import { LogoutOutlined } from "@ant-design/icons"
+import { Avatar, Space, Button, Flex, Menu, Dropdown } from 'antd';
+import type { MenuProps } from 'antd';
+import { DownOutlined, LogoutOutlined } from '@ant-design/icons';
+
+
+const items: MenuProps['items'] = [
+  {
+    label: <a href="/profile">Profile</a>,
+    key: '0',
+  },
+  {
+    label: <a href="/create">Create</a>,
+    key: '1',
+  },
+  {
+    type: 'divider',
+  },
+  {
+    label: <Button
+    type="link"
+    size="large"
+    icon={<LogoutOutlined />}
+    danger
+    onClick={() => signOut()}
+  >
+    Sign out
+  </Button>,
+    key: '3',
+  },
+];
 
 const Header = () => {
   const { data: session } = useSession()
@@ -47,24 +75,18 @@ const Header = () => {
               label: (
                 <>
                   {session ? (
-                    <Space>
-                      <Link href="/profile">
-                        {image && (
+                    <Dropdown menu={{ items }} trigger={['click']}>
+                    <a className="nav-link" onClick={(e) => e.preventDefault()}>
+                      <Space>
+                      {image && (
                           <span title="Profile">
-                            <Avatar src={image} />
+                            <Avatar src={image} alt="user image" />
                           </span>
                         )}
-                      </Link>
-                      <Button
-                        type="link"
-                        size="large"
-                        icon={<LogoutOutlined />}
-                        danger
-                        onClick={() => signOut()}
-                      >
-                        Sign out
-                      </Button>
-                    </Space>
+                        <DownOutlined />
+                      </Space>
+                    </a>
+                  </Dropdown>
                   ) : (
                     <Link href="/api/auth/signin" legacyBehavior>
                       <a
@@ -78,21 +100,7 @@ const Header = () => {
                 </>
               ),
               key: 2,
-            },
-            {
-              label: (
-                <>
-                  {session ? (
-                    <Link href="/create" legacyBehavior>
-                      <a data-active={isActive("/create")} className="nav-link">
-                        Create
-                      </a>
-                    </Link>
-                  ) : null}
-                </>
-              ),
-              key: 3,
-            },
+            }
           ]}
         />
       </Flex>
